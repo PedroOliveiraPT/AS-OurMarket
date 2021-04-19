@@ -15,7 +15,7 @@ import FIFO.IFIFO;
 public class SACorridorHall implements ICorridorHall_Customer{
     private IFIFO saCorridorHall;
     
-    SACorridorHall(int maxCustomers){
+    public SACorridorHall(int maxCustomers){
         this.saCorridorHall = new FIFO(maxCustomers);
     }
     

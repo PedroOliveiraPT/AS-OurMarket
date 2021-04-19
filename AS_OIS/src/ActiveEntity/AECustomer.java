@@ -4,6 +4,8 @@ package ActiveEntity;
 import SAEntranceHall.IEntranceHall_Customer;
 import SAIdle.IIdle_Customer;
 import SAOutsideHall.IOutsideHall_Customer;
+import SACorridorHall.ICorridorHall_Customer;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -25,12 +27,16 @@ public class AECustomer extends Thread {
     private final IOutsideHall_Customer outsideHall;
     // área partilhada EntranceHall
     private final IEntranceHall_Customer entranceHall;
+    // área partilhada CorridorHall
+    private final ICorridorHall_Customer corridorHall;
     
-    public AECustomer( int customerId, IIdle_Customer idle, IOutsideHall_Customer outsideHall, IEntranceHall_Customer entranceHall  /* mais args */ ) {
+    public AECustomer( int customerId, IIdle_Customer idle, IOutsideHall_Customer outsideHall, 
+                        IEntranceHall_Customer entranceHall, ICorridorHall_Customer corridorHall   /* mais args */ ) {
         this.customerId = customerId; 
         this.idle = idle;
         this.outsideHall = outsideHall;
         this.entranceHall = entranceHall;
+        this.corridorHall = corridorHall;
     }
     @Override
     public void run() {
@@ -43,6 +49,10 @@ public class AECustomer extends Thread {
             System.out.println(this.customerId + " entering Entrance Hall");
             entranceHall.in(customerId);
             System.out.println(this.customerId + " left entrance hall");
+            corridorHall.in(customerId);
+            corridorHall.call();
+            System.out.println(this.customerId + " shopping ");
+            
             break;
             // mais
         }

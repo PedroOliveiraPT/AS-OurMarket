@@ -10,5 +10,6 @@ package SACorridorHall;
  * @author pedro
  */
 public interface ICorridorHall_Customer {
-    
+    public void call();
+    public void in(int customerId);
 }

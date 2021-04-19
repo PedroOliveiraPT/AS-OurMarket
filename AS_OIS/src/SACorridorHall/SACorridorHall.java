@@ -16,7 +16,15 @@ public class SACorridorHall implements ICorridorHall_Customer{
     private IFIFO saCorridorHall;
     
     public SACorridorHall(int maxCustomers){
-        this.saCorridorHall = new FIFO(maxCustomers);
+        this.saCorridorHall = new CorridorFIFO(maxCustomers);
     }
     
+    public void in(int customerId){
+        this.saCorridorHall.in(customerId);
+    }
+
+    public void call(){
+        this.saCorridorHall.out();
+    }
+
 }

@@ -79,30 +79,11 @@ public class CorridorFIFO implements IFIFO {
             // inserir customer no fifo
             this.customerId[ idx ] = customerId;
             
-            // o fifo poderá estar vazio, pelo q neste caso a Customer poderá
-            // estar à espera q um Customer chegue. Necessério avisar Manager
-            // q se encontra em espera na Condition cEmpty
-            if ( count == 0 )
-                cEmpty.signal();
-            
             // incrementar número customers no fifo
             count++;
-            
-            // ciclo à espera de autorização para sair do fifo
-            while ( !leave[ idx ] )
-                // qd se faz await, permite-se q outros thread tenham acesso
-                // à zona protegida pelo lock
-                cStay[ idx ].await();
 
             // id do Customer q está a sair do fifo
-            id = this.customerId[ idx ];
-                    
-            // atualizar variável de bloqueio
-            leave[ idx ] = false;
-            // avisar Manager que Customer vai sair. Manager está à espera na
-            // Condition cLeaving
-            cLeaving.signal();
-            
+            id = this.customerId[ idx ];        
             
             
             // testar se Customer q vai sair é o q está há mais tempo no fifo

@@ -164,8 +164,15 @@ public class FIFO implements IFIFO {
     }
     
     @Override
-    public boolean checkFull(){
-        return count == maxCustomers;
+    public boolean full(){
+        boolean isFull;
+        rl.lock();
+        try {
+            isFull = count == maxCustomers;
+        } finally {
+            rl.unlock();
+        }
+        return isFull;
     }
 
     @Override

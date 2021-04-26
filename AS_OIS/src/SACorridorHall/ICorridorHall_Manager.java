@@ -10,5 +10,5 @@ package SACorridorHall;
  * @author pedro
  */
 public interface ICorridorHall_Manager {
-    
+    public boolean checkFull();
 }

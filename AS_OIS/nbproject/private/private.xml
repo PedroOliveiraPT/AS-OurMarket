@@ -3,8 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS_OIS/AS_OIS/src/Main/OIS.java</file>
-            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS_OIS/AS_OIS/src/ActiveEntity/AECustomer.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/ActiveEntity/AEControl.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/Main/OIS.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/Communication/CClient.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/FIFO/CorridorFIFO.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/ActiveEntity/AECashier.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/SACorridorHall/SACorridorHall.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/ActiveEntity/AECustomer.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/Communication/CServer.java</file>
+            <file>file:/C:/Users/Luís/Desktop/AS/AS-OurMarket/AS_OIS/src/FIFO/FIFO.java</file>
         </group>
     </open-files>
 </project-private>

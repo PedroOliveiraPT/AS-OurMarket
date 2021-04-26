@@ -5,14 +5,27 @@
  */
 package Main;
 
+
 import ActiveEntity.AEControl;
-import ActiveEntity.AECustomer;import ActiveEntity.AEManager;
+import ActiveEntity.AECustomer;
+import ActiveEntity.AEManager;
 import Communication.CClient;
 import Communication.CServer;
+
+import ActiveEntity.AECashier;
+import ActiveEntity.AECustomer;
+import ActiveEntity.AEManager;
+import SACorridor.ICorridor_Customer;
+import SACorridor.SACorridor;
+import SACorridorHall.ICorridorHall_Customer;
+import SACorridorHall.ICorridorHall_Manager;
+
 import SACorridorHall.SACorridorHall;
 import SAEntranceHall.IEntranceHall_Customer;
 import SAEntranceHall.IEntranceHall_Manager;
 import SAEntranceHall.SAEntranceHall;
+
+import SAIdle.IIdle_Cashier;
 
 import SAIdle.IIdle_Customer;
 import SAIdle.IIdle_Manager;
@@ -21,6 +34,12 @@ import SAIdle.SAIdle;
 import SAOutsideHall.IOutsideHall_Customer;
 import SAOutsideHall.IOutsideHall_Manager;
 import SAOutsideHall.SAOutsideHall;
+import SAPaymentHall.IPaymentHall_Cashier;
+import SAPaymentHall.IPaymentHall_Customer;
+import SAPaymentHall.SAPaymentHall;
+import SAPaymentPoint.IPaymentPoint_Cashier;
+import SAPaymentPoint.IPaymentPoint_Customer;
+import SAPaymentPoint.SAPaymentPoint;
 
 import SACorridorHall.ICorridorHall_Customer;
 
@@ -37,14 +56,10 @@ public class OIS extends javax.swing.JFrame {
     public OIS() {
         initComponents();
         
-        this.entranceHallJTextPanes = new javax.swing.JTextPane[]{EH_pos01, EH_pos02, EH_pos03, EH_pos04, EH_pos05, EH_pos06};
-        javax.swing.JTextPane[] corridorHallJTextPanes = {CH_01_pos01, CH_01_pos02,CH_01_pos03,CH_02_pos01,CH_02_pos02,CH_02_pos03,CH_03_pos01,CH_03_pos02, CH_03_pos03};
-        javax.swing.JTextPane[] corridorJTextPanes = {C_01_pos01,C_01_pos02,C_02_pos01,C_02_pos02,C_03_pos01,C_03_pos02};
-        javax.swing.JTextPane[] payHallJTextPanes = {PH_pos01, PH_pos02};
-        javax.swing.JTextPane[] payJTextPanes = {P_pos01};
 
 
-        initCommunications();
+
+//        initCommunications();
         initOIS();
     }
     private void initOIS() {
@@ -59,34 +74,44 @@ public class OIS extends javax.swing.JFrame {
         // ....
         
         System.out.println("Preparing OIS");
-        AEControl aEControl = new AEControl(cServer, this.entranceHallJTextPanes);
-        aEControl.start();
+        final SAIdle idle = new SAIdle();
+        final SAOutsideHall outsideHall =  new SAOutsideHall( MAX_CUSTOMERS );
+        final SAEntranceHall entranceHall =  new SAEntranceHall( SIZE_ENTRANCE_HALL );
+        final SACorridorHall[] corridorHalls = new SACorridorHall[N_CORRIDOR_HALL];
+        final SACorridor[] corridors = new SACorridor[N_CORRIDOR_HALL];
+        final SAPaymentHall paymentHall = new SAPaymentHall(SIZE_PAYMENT_HALL, corridors);
+        final SAPaymentPoint paymentPoint = new SAPaymentPoint(SIZE_PAYMENT_POINT);
         
-//        final SAIdle idle = new SAIdle();
-//        final SAOutsideHall outsideHall =  new SAOutsideHall( MAX_CUSTOMERS );
-//        final SAEntranceHall entranceHall =  new SAEntranceHall( SIZE_ENTRANCE_HALL );
-//        final SACorridorHall[] corridorHalls = new SACorridorHall[N_CORRIDOR_HALL];
-//        
-//        for (int i = 0; i < N_CORRIDOR_HALL; i++) {
-//            corridorHalls[i] = new SACorridorHall(SIZE_CORRIDOR_HALL);
-//        }
-//        // outras SA ...
-//        
-//        final AECustomer[] aeCustomer = new AECustomer[ MAX_CUSTOMERS ];
-//        final AEManager aeManager = new AEManager((IIdle_Manager) idle,
-//                                                    (IOutsideHall_Manager) outsideHall,
-//                                                    (IEntranceHall_Manager) entranceHall);
-//        
-//        for ( int i = 0; i < MAX_CUSTOMERS; i++ ) {
-//            aeCustomer[ i ] = new AECustomer( i,
-//                                              (IIdle_Customer) idle,
-//                                              (IOutsideHall_Customer) outsideHall,
-//                                              (IEntranceHall_Customer) entranceHall,
-//                                              (ICorridorHall_Customer[]) corridorHalls);
-//            aeCustomer[ i ].start();
-//        }
-//        
-//        aeManager.start();
+        for (int i = 0; i < N_CORRIDOR_HALL; i++) {
+            corridorHalls[i] = new SACorridorHall(SIZE_CORRIDOR_HALL);
+            corridors[i] = new SACorridor(SIZE_CORRIDOR, corridorHalls[i]);
+        }
+        // outras SA ...
+        
+        final AECustomer[] aeCustomer = new AECustomer[ MAX_CUSTOMERS ];
+        final AEManager aeManager = new AEManager((IIdle_Manager) idle,
+                                                    (IOutsideHall_Manager) outsideHall,
+                                                    (IEntranceHall_Manager) entranceHall,
+                                                    (ICorridorHall_Manager[]) corridorHalls);
+        
+        final AECashier aeCashier = new AECashier((IIdle_Cashier) idle,
+                                                   (IPaymentHall_Cashier) paymentHall,
+                                                    (IPaymentPoint_Cashier) paymentPoint);
+        
+        for ( int i = 0; i < MAX_CUSTOMERS; i++ ) {
+            aeCustomer[ i ] = new AECustomer( i,
+                                              (IIdle_Customer) idle,
+                                              (IOutsideHall_Customer) outsideHall,
+                                              (IEntranceHall_Customer) entranceHall,
+                                              (ICorridorHall_Customer[]) corridorHalls,
+                                              (ICorridor_Customer[]) corridors,
+                                              (IPaymentHall_Customer) paymentHall,
+                                              (IPaymentPoint_Customer) paymentPoint
+            );
+            aeCustomer[ i ].start();
+        }
+        aeCashier.start();
+        aeManager.start();
         
         
         
@@ -96,7 +121,10 @@ public class OIS extends javax.swing.JFrame {
 //            aeManager.join();
 //            for ( int i = 0; i < MAX_CUSTOMERS; i++ )
 //                aeCustomer[ i ].join();
+//            aeCashier.join();
 //        } catch ( Exception ex ) {}    
+        
+        System.out.println("Finished simulation");
             
     }
     

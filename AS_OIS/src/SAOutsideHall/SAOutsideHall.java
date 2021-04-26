@@ -21,6 +21,11 @@ public class SAOutsideHall implements IOutsideHall_Manager,
     public SAOutsideHall( int maxCustomers ) {
         this.saOutsideHallFIFO = new FIFO(maxCustomers);
     } 
+
+    @Override
+    public boolean checkFull() {
+        return this.saOutsideHallFIFO.full();
+    }
     @Override
     public void call() {
         this.saOutsideHallFIFO.out();
@@ -29,5 +34,10 @@ public class SAOutsideHall implements IOutsideHall_Manager,
     @Override
     public void in(int customerId) {
         this.saOutsideHallFIFO.in(customerId);
+    }
+    
+    @Override
+    public int count(){
+        return this.saOutsideHallFIFO.getCount();
     }
 }

@@ -10,7 +10,8 @@ package SAIdle;
  */
 public class SAIdle implements IIdle_Customer,
                                IIdle_Manager,
-                               IIdle_Control {
+                               IIdle_Control,
+                               IIdle_Cashier{
 
     public SAIdle() {
     }

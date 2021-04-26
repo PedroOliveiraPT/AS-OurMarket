@@ -5,8 +5,10 @@
  */
 package SAPaymentHall;
 
+import FIFO.CorridorFIFO;
 import FIFO.FIFO;
 import FIFO.IFIFO;
+import SACorridor.SACorridor;
 
 /**
  *
@@ -16,10 +18,12 @@ public class SAPaymentHall implements IPaymentHall_Cashier,
                                     IPaymentHall_Control,
                                     IPaymentHall_Customer{
     
-    public IFIFO saPaymentHall;
+    private IFIFO saPaymentHall;
+    private SACorridor[] saCorridors;
 
-    public SAPaymentHall( int maxCustomers ) {
+    public SAPaymentHall( int maxCustomers, SACorridor[] saCorridors ) {
         this.saPaymentHall = new FIFO(maxCustomers);
+        this.saCorridors = saCorridors;
     }
     
     @Override
@@ -29,7 +33,28 @@ public class SAPaymentHall implements IPaymentHall_Cashier,
 
     @Override
     public void call() {
+        /*SACorridor outCorr = this.saCorridors[0];
+        int oldest_id = -1, id = outCorr.getIdxOut();
+        for (SACorridor corr: this.saCorridors){
+            id = corr.getIdxOut();
+            if (oldest_id < 0 || oldest_id < id){
+                outCorr = corr;
+                oldest_id = id;
+            }
+        }
+        System.out.println("id " + id);
+        */
         this.saPaymentHall.out();
+    }
+    
+    @Override
+    public boolean checkFull(){
+        return this.saPaymentHall.full();
+    }
+
+    @Override
+    public int getCount() {
+        return this.saPaymentHall.getCount(); //To change body of generated methods, choose Tools | Templates.
     }
         
 }

@@ -12,5 +12,6 @@ package SAEntranceHall;
 public interface IEntranceHall_Manager {
     public void call();
     public int count();
+    public boolean checkFull();
     
 }

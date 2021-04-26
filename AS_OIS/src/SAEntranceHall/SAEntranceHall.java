@@ -34,4 +34,9 @@ public class SAEntranceHall implements IEntranceHall_Customer,
     
     @Override
     public int count(){ return this.saEntranceHall.getCount(); }
+
+    @Override
+    public boolean checkFull() {
+        return this.saEntranceHall.full();
+    }
 }

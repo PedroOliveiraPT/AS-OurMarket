@@ -9,6 +9,6 @@ package SAIdle;
  *
  * @author pedro
  */
-public class IIdle_Cashier {
+public interface IIdle_Cashier {
     
 }

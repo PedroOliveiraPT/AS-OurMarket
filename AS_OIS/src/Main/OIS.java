@@ -5,11 +5,17 @@
  */
 package Main;
 
+import ActiveEntity.AECashier;
 import ActiveEntity.AECustomer;import ActiveEntity.AEManager;
+import SACorridor.ICorridor_Customer;
+import SACorridor.SACorridor;
+import SACorridorHall.ICorridorHall_Customer;
+import SACorridorHall.ICorridorHall_Manager;
 import SACorridorHall.SACorridorHall;
 import SAEntranceHall.IEntranceHall_Customer;
 import SAEntranceHall.IEntranceHall_Manager;
 import SAEntranceHall.SAEntranceHall;
+import SAIdle.IIdle_Cashier;
 ;
 import SAIdle.IIdle_Customer;
 import SAIdle.IIdle_Manager;
@@ -17,6 +23,12 @@ import SAIdle.SAIdle;
 import SAOutsideHall.IOutsideHall_Customer;
 import SAOutsideHall.IOutsideHall_Manager;
 import SAOutsideHall.SAOutsideHall;
+import SAPaymentHall.IPaymentHall_Cashier;
+import SAPaymentHall.IPaymentHall_Customer;
+import SAPaymentHall.SAPaymentHall;
+import SAPaymentPoint.IPaymentPoint_Cashier;
+import SAPaymentPoint.IPaymentPoint_Customer;
+import SAPaymentPoint.SAPaymentPoint;
 
 /*
  * @author omp
@@ -45,25 +57,39 @@ public class OIS extends javax.swing.JFrame {
         final SAOutsideHall outsideHall =  new SAOutsideHall( MAX_CUSTOMERS );
         final SAEntranceHall entranceHall =  new SAEntranceHall( SIZE_ENTRANCE_HALL );
         final SACorridorHall[] corridorHalls = new SACorridorHall[N_CORRIDOR_HALL];
+        final SACorridor[] corridors = new SACorridor[N_CORRIDOR_HALL];
+        final SAPaymentHall paymentHall = new SAPaymentHall(SIZE_PAYMENT_HALL, corridors);
+        final SAPaymentPoint paymentPoint = new SAPaymentPoint(SIZE_PAYMENT_POINT);
         
         for (int i = 0; i < N_CORRIDOR_HALL; i++) {
             corridorHalls[i] = new SACorridorHall(SIZE_CORRIDOR_HALL);
+            corridors[i] = new SACorridor(SIZE_CORRIDOR, corridorHalls[i]);
         }
         // outras SA ...
         
         final AECustomer[] aeCustomer = new AECustomer[ MAX_CUSTOMERS ];
         final AEManager aeManager = new AEManager((IIdle_Manager) idle,
                                                     (IOutsideHall_Manager) outsideHall,
-                                                    (IEntranceHall_Manager) entranceHall);
+                                                    (IEntranceHall_Manager) entranceHall,
+                                                    (ICorridorHall_Manager[]) corridorHalls);
+        
+        final AECashier aeCashier = new AECashier((IIdle_Cashier) idle,
+                                                   (IPaymentHall_Cashier) paymentHall,
+                                                    (IPaymentPoint_Cashier) paymentPoint);
         
         for ( int i = 0; i < MAX_CUSTOMERS; i++ ) {
             aeCustomer[ i ] = new AECustomer( i,
                                               (IIdle_Customer) idle,
                                               (IOutsideHall_Customer) outsideHall,
-                                              (IEntranceHall_Customer) entranceHall);
+                                              (IEntranceHall_Customer) entranceHall,
+                                              (ICorridorHall_Customer[]) corridorHalls,
+                                              (ICorridor_Customer[]) corridors,
+                                              (IPaymentHall_Customer) paymentHall,
+                                              (IPaymentPoint_Customer) paymentPoint
+            );
             aeCustomer[ i ].start();
         }
-        
+        aeCashier.start();
         aeManager.start();
         
         
@@ -74,7 +100,10 @@ public class OIS extends javax.swing.JFrame {
             aeManager.join();
             for ( int i = 0; i < MAX_CUSTOMERS; i++ )
                 aeCustomer[ i ].join();
+            aeCashier.join();
         } catch ( Exception ex ) {}    
+        
+        System.out.println("Finished simulation");
             
     }
     /**

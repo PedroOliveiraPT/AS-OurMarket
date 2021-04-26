@@ -11,4 +11,5 @@ package SAPaymentHall;
  */
 public interface IPaymentHall_Customer {
     public void in(int customerId);
+    public boolean checkFull();
 }

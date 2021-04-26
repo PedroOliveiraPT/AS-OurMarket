@@ -5,14 +5,14 @@
  */
 package SACorridorHall;
 
-import FIFO.FIFO;
+import FIFO.CorridorFIFO;
 import FIFO.IFIFO;
 
 /**
  *
  * @author pedro
  */
-public class SACorridorHall implements ICorridorHall_Customer{
+public class SACorridorHall implements ICorridorHall_Customer, ICorridorHall_Manager{
     private IFIFO saCorridorHall;
     
     public SACorridorHall(int maxCustomers){
@@ -25,6 +25,10 @@ public class SACorridorHall implements ICorridorHall_Customer{
 
     public void call(){
         this.saCorridorHall.out();
+    }
+    
+    public boolean checkFull(){
+        return this.saCorridorHall.full();
     }
 
 }

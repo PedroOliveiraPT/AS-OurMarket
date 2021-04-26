@@ -12,7 +12,7 @@ package FIFO;
 public interface IFIFO {
     public int in( int customerId );
     public void out();
-    public boolean checkFull();
+    public boolean full();
 
     public int getCount();
 }

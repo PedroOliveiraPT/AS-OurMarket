@@ -5,8 +5,12 @@
  */
 package FIFO;
 
+import SAPaymentHall.SAPaymentHall;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class has the purpose of implementing a FIFO based on the next position
@@ -20,6 +24,8 @@ public class CorridorFIFO implements IFIFO {
     private final int customerId[];
     // array para Condition de bloqueio (uma por customer)
     private final Condition cStay[];
+    // array para Condition de bloqueio (uma por customer)
+    private final Condition cShop[];
     // Conditio  de bloqueio de fifo cheio
     private final Condition cFull;
     // Condition de bloqueio de fifo vazio
@@ -28,6 +34,8 @@ public class CorridorFIFO implements IFIFO {
     private final Condition cLeaving;
     // array para condição de bloqueio de cada customer
     private final boolean leave[];
+    // array para treadmill de 10 passos para simular shopping
+    private final boolean shopTreadmill[];
     // número máximo de customer (dimensão dos arrays)
     private final int maxCustomers;
     
@@ -37,7 +45,6 @@ public class CorridorFIFO implements IFIFO {
     private int idxOut;
     // número de customers no fifo
     private int count = 0;
-
     
     private static int id_in = 0;
     private static int id_out = 0;
@@ -46,16 +53,20 @@ public class CorridorFIFO implements IFIFO {
         this.maxCustomers = maxCustomers;
         customerId = new int[ maxCustomers ];
         cStay = new Condition[ maxCustomers ];
+        cShop = new Condition[ maxCustomers ];
         leave = new boolean[ maxCustomers ];
         for ( int i = 0; i < maxCustomers; i++ ) {
             cStay[ i ] = rl.newCondition();
+            cShop[ i ] = rl.newCondition();
             leave[ i ] = false;
         }
         cFull = rl.newCondition();
         cEmpty = rl.newCondition();
         cLeaving = rl.newCondition();
         idxIn = 0;
-        idxOut = 0; 
+        idxOut = 0;
+        shopTreadmill = new boolean[10];
+        for (int i = 0; i < 10; i++) shopTreadmill[i] = true;
     }
 
     @Override
@@ -81,10 +92,18 @@ public class CorridorFIFO implements IFIFO {
             
             // incrementar número customers no fifo
             count++;
+            
+             // ciclo à espera de autorização para sair do fifo
+            while ( !leave[ idx ] )
+                // qd se faz await, permite-se q outros thread tenham acesso
+                // à zona protegida pelo lock
+                cStay[ idx ].await();
 
             // id do Customer q está a sair do fifo
-            id = this.customerId[ idx ];        
-            
+            id = this.customerId[ idx ];
+                    
+            // atualizar variável de bloqueio
+            leave[ idx ] = false;
             
             // testar se Customer q vai sair é o q está há mais tempo no fifo
             assert idx == ( idxOut == 0 ? maxCustomers - 1 : idxOut - 1 );
@@ -107,20 +126,96 @@ public class CorridorFIFO implements IFIFO {
         // threads possam entrar na zona crítica
         return id;
     }
-
-    @Override
-    public void out() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public void shop(int customerId, SAPaymentHall paymenthall) {
+        try {
+            // variáveis locais
+            int idx;
+            int id = 0;
+            
+            // esta operação não pode ser feita antes da anterior para
+            // garantir q o idxIn utilizado é apenas deste Thread activo
+            idx = idxIn;
+            // incrementar apontador de escrita
+            idxIn = (++idxIn) % maxCustomers;
+            // inserir customer no fifo
+            this.customerId[ idx ] = customerId;
+            
+            // incrementar número customers no fifo
+            count++;
+            for (int i = 0; i < 10; i++){
+                
+                while (!shopTreadmill[i]) TimeUnit.SECONDS.sleep(1);
+                
+                shopTreadmill[i] = false;
+                
+                TimeUnit.MILLISECONDS.sleep(100);
+                
+                System.out.println(customerId + "shopping item " + i);
+                
+                shopTreadmill[i] = true;
+                
+            }
+            
+            // ciclo à espera de autorização para sair do fifo
+            while ( paymenthall.checkFull() ){
+                System.out.println("is full, waiting"); 
+                TimeUnit.MILLISECONDS.sleep(100);
+            }
+                // qd se faz await, permite-se q outros thread tenham acesso
+                // à zona protegida pelo lock
+               
+            count--;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(CorridorFIFO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
     }
 
     @Override
-    public boolean checkFull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void out() {
+        if (count == 0) return;
+        try {
+            rl.lock();
+            
+            int idx = idxOut;
+            // atualizar idxOut
+            idxOut = (++idxOut) % maxCustomers; 
+            // autorizar a saída do customer q há mais tempo está no fifo
+            leave[ idx ] = true;
+            // acordar o customer
+            cStay[ idx ].signal();
+            // aguardar até q Customer saia do fifo
+            while ( leave[ idx ] == true )
+                // qd se faz await, permite-se q outros thread tenham acesso
+                // à zona protegida pelo lock
+                cLeaving.await();  
+
+        } catch ( Exception ex ) {}
+        finally {
+            rl.unlock();
+        }
+    }
+
+    @Override
+    public boolean full() {
+        boolean isFull;
+        rl.lock();
+        try {
+            isFull = count == maxCustomers;
+        } finally {
+            rl.unlock();
+        }
+        return isFull;
     }
 
     @Override
     public int getCount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.count;
+    }
+    
+    public int getIdxOut(){
+        return this.idxOut;
     }
     
 }

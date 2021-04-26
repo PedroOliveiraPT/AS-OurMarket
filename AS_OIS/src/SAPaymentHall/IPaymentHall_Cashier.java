@@ -11,4 +11,5 @@ package SAPaymentHall;
  */
 public interface IPaymentHall_Cashier {
     public void call();
+    public int getCount();
 }

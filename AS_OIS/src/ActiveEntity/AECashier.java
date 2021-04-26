@@ -8,6 +8,9 @@ package ActiveEntity;
 import SAIdle.IIdle_Cashier;
 import SAPaymentHall.IPaymentHall_Cashier;
 import SAPaymentPoint.IPaymentPoint_Cashier;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,9 +24,9 @@ public class AECashier extends Thread{
     // área partilhada EntranceHall
     private final IPaymentPoint_Cashier paymentPoint;
     
-    public AECashier(IIdle_Cashier idle, IPaymentHall_Cashier outsideHall, IPaymentPoint_Cashier entranceHall){
+    public AECashier(IIdle_Cashier idle, IPaymentHall_Cashier paymentHall, IPaymentPoint_Cashier entranceHall){
         this.idle = idle;
-        this.paymentHall = outsideHall;
+        this.paymentHall = paymentHall;
         this.paymentPoint = entranceHall;
         
     }
@@ -31,11 +34,18 @@ public class AECashier extends Thread{
     @Override
     public void run() {
         while (true){
-            // this.idle.idle();
-            
-            this.paymentHall.call();
-            
-            this.paymentPoint.call();
+            try {
+                // this.idle.idle();
+                if (this.paymentHall.getCount() > 0){
+                    
+                    this.paymentHall.call();
+                    
+                    this.paymentPoint.call();
+                }
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AECashier.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

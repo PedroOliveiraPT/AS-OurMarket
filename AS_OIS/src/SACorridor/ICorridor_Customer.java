@@ -3,14 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SAOutsideHall;
+package SACorridor;
+
+import SAPaymentHall.SAPaymentHall;
 
 /**
  *
- * @author omp
+ * @author pedro
  */
-public interface IOutsideHall_Manager {
+public interface ICorridor_Customer {
     public void call();
+    public void in(int customerId, SAPaymentHall ph );
     public boolean checkFull();
-    public int count();
+    
 }

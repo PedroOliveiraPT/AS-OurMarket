@@ -6,6 +6,7 @@
 package ActiveEntity;
 
 
+import SACorridorHall.ICorridorHall_Manager;
 import SAEntranceHall.IEntranceHall_Manager;
 import SAIdle.IIdle_Manager;
 import SAOutsideHall.IOutsideHall_Manager;
@@ -21,12 +22,14 @@ public class AEManager extends Thread {
     private final IOutsideHall_Manager outsideHall;
     // área partilhada EntranceHall
     private final IEntranceHall_Manager entranceHall;
+    // Grupo de áreas para os Corridor Halls;
+    private final ICorridorHall_Manager[] corridorHalls;
     
-    public AEManager(IIdle_Manager idle, IOutsideHall_Manager outsideHall, IEntranceHall_Manager entranceHall){
+    public AEManager(IIdle_Manager idle, IOutsideHall_Manager outsideHall, IEntranceHall_Manager entranceHall, ICorridorHall_Manager[] corridorHalls){
         this.idle = idle;
         this.outsideHall = outsideHall;
         this.entranceHall = entranceHall;
-        
+        this.corridorHalls = corridorHalls;
     }
     
     @Override
@@ -34,11 +37,12 @@ public class AEManager extends Thread {
         while (true){
             // this.idle.idle();
             
-            this.outsideHall.call();
+            if (!this.entranceHall.checkFull() && this.outsideHall.count() > 0)
+                this.outsideHall.call(); //
             
-            System.out.println(this.entranceHall.count());
-            
-            this.entranceHall.call();
+            for (ICorridorHall_Manager man: corridorHalls)
+                if (!man.checkFull() && this.entranceHall.count() > 0)
+                    this.entranceHall.call();
         }
     }
 }

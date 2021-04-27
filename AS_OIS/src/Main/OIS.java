@@ -83,7 +83,7 @@ public class OIS extends javax.swing.JFrame {
         // ....
         
         System.out.println("Preparing OIS");
-        final SAIdle idle = new SAIdle();
+        final SAIdle idle = new SAIdle( MAX_CUSTOMERS );
         final SAOutsideHall outsideHall =  new SAOutsideHall( MAX_CUSTOMERS );
         final SAEntranceHall entranceHall =  new SAEntranceHall( SIZE_ENTRANCE_HALL );
         final SACorridorHall[] corridorHalls = new SACorridorHall[N_CORRIDOR_HALL];
@@ -101,12 +101,12 @@ public class OIS extends javax.swing.JFrame {
         // outras SA ...
         
         final AECustomer[] aeCustomer = new AECustomer[ MAX_CUSTOMERS ];
-        final AEManager aeManager = new AEManager((IIdle_Manager) idle,
+        final AEManager aeManager = new AEManager( MAX_CUSTOMERS, (IIdle_Manager) idle,
                                                     (IOutsideHall_Manager) outsideHall,
                                                     (IEntranceHall_Manager) entranceHall,
                                                     (ICorridorHall_Manager[]) corridorHalls);
         
-        final AECashier aeCashier = new AECashier((IIdle_Cashier) idle,
+        final AECashier aeCashier = new AECashier(MAX_CUSTOMERS, (IIdle_Cashier) idle,
                                                    (IPaymentHall_Cashier) paymentHall,
                                                     (IPaymentPoint_Cashier) paymentPoint);
         

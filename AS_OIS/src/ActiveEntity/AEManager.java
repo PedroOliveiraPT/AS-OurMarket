@@ -28,17 +28,21 @@ public class AEManager extends Thread {
     // Grupo de áreas para os Corridor Halls;
     private final ICorridorHall_Manager[] corridorHalls;
     
-    public AEManager(IIdle_Manager idle, IOutsideHall_Manager outsideHall, IEntranceHall_Manager entranceHall, ICorridorHall_Manager[] corridorHalls){
+    private final int maxCustomers;
+    
+    public AEManager(int maxCustomers, IIdle_Manager idle, IOutsideHall_Manager outsideHall, IEntranceHall_Manager entranceHall, ICorridorHall_Manager[] corridorHalls){
         this.idle = idle;
         this.outsideHall = outsideHall;
         this.entranceHall = entranceHall;
         this.corridorHalls = corridorHalls;
+        this.maxCustomers = maxCustomers;
     }
     
     @Override
     public void run() {
+        int numCustomersEnter = 0;
         while (true){
-            // this.idle.idle();
+            this.idle.idle();
             
             if (!this.entranceHall.checkFull() && this.outsideHall.count() > 0){
                 try {
@@ -56,11 +60,14 @@ public class AEManager extends Thread {
                     try {
                         this.entranceHall.call();
                         TimeUnit.MILLISECONDS.sleep(100);
+                        numCustomersEnter += 1;
                     } catch (InterruptedException ex) {
                         Logger.getLogger(AEManager.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
+            
+            if (numCustomersEnter == this.maxCustomers) this.idle.idle();
         }
     }
 }

@@ -10,5 +10,7 @@ package SAIdle;
  * @author pedro
  */
 public interface IIdle_Cashier {
+
+    public void idleCashier();
     
 }

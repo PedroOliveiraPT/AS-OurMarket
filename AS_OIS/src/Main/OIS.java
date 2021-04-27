@@ -15,6 +15,7 @@ import Communication.CServer;
 import ActiveEntity.AECashier;
 import ActiveEntity.AECustomer;
 import ActiveEntity.AEManager;
+import GUI.GUI_Manager;
 import SACorridor.ICorridor_Customer;
 import SACorridor.SACorridor;
 import SACorridorHall.ICorridorHall_Customer;
@@ -50,13 +51,21 @@ public class OIS extends javax.swing.JFrame {
     CServer cServer;
     
     javax.swing.JTextPane[] entranceHallJTextPanes;
+    javax.swing.JTextPane[] corridorHallJTextPanes;
+    javax.swing.JTextPane[] corridorJTextPanes;
+    javax.swing.JTextPane[] payHallJTextPanes;
+    javax.swing.JTextPane[] payJTextPanes;
     /**
      * Creates new form OIS
      */
     public OIS() {
-        //initComponents();
+        initComponents();
         
-
+        this.entranceHallJTextPanes = new javax.swing.JTextPane[]{EH_pos01, EH_pos02, EH_pos03, EH_pos04, EH_pos05, EH_pos06};
+        this.corridorHallJTextPanes = new javax.swing.JTextPane[]{CH_01_pos01, CH_01_pos02,CH_01_pos03,CH_02_pos01,CH_02_pos02,CH_02_pos03,CH_03_pos01,CH_03_pos02, CH_03_pos03};
+        this.corridorJTextPanes = new javax.swing.JTextPane[]{C_01_pos01,C_01_pos02,C_02_pos01,C_02_pos02,C_03_pos01,C_03_pos02};
+        this.payHallJTextPanes = new javax.swing.JTextPane[]{PH_pos01, PH_pos02};
+        this.payJTextPanes = new javax.swing.JTextPane[]{P_pos01};
 
 
 //        initCommunications();
@@ -82,6 +91,9 @@ public class OIS extends javax.swing.JFrame {
         final SAPaymentHall paymentHall = new SAPaymentHall(SIZE_PAYMENT_HALL, corridors);
         final SAPaymentPoint paymentPoint = new SAPaymentPoint(SIZE_PAYMENT_POINT);
         
+        GUI_Manager guim = new GUI_Manager(OH_all, entranceHallJTextPanes, corridorHallJTextPanes, corridorJTextPanes, 
+                payHallJTextPanes, payJTextPanes);
+        
         for (int i = 0; i < N_CORRIDOR_HALL; i++) {
             corridorHalls[i] = new SACorridorHall(SIZE_CORRIDOR_HALL);
             corridors[i] = new SACorridor(SIZE_CORRIDOR, corridorHalls[i]);
@@ -106,7 +118,8 @@ public class OIS extends javax.swing.JFrame {
                                               (ICorridorHall_Customer[]) corridorHalls,
                                               (ICorridor_Customer[]) corridors,
                                               (IPaymentHall_Customer) paymentHall,
-                                              (IPaymentPoint_Customer) paymentPoint
+                                              (IPaymentPoint_Customer) paymentPoint,
+                                              guim
             );
             aeCustomer[ i ].start();
         }
@@ -147,7 +160,7 @@ public class OIS extends javax.swing.JFrame {
     private void initComponents() {
 
         panel3 = new java.awt.Panel();
-        jTextField1 = new javax.swing.JTextField();
+        OH_all = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jPanel1 = new javax.swing.JPanel();
@@ -235,13 +248,13 @@ public class OIS extends javax.swing.JFrame {
 
         panel3.setBackground(new java.awt.Color(153, 153, 153));
 
-        jTextField1.setEditable(false);
-        jTextField1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextField1.setText("10 Costumers Waiting");
-        jTextField1.setToolTipText("");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        OH_all.setEditable(false);
+        OH_all.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        OH_all.setText("0 Costumers Waiting");
+        OH_all.setToolTipText("");
+        OH_all.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                OH_allActionPerformed(evt);
             }
         });
 
@@ -249,13 +262,13 @@ public class OIS extends javax.swing.JFrame {
         panel3.setLayout(panel3Layout);
         panel3Layout.setHorizontalGroup(
             panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+            .addComponent(OH_all, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
         );
         panel3Layout.setVerticalGroup(
             panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel3Layout.createSequentialGroup()
                 .addGap(66, 66, 66)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(OH_all, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(97, Short.MAX_VALUE))
         );
 
@@ -267,32 +280,33 @@ public class OIS extends javax.swing.JFrame {
 
         EH_pos01.setEditable(false);
         EH_pos01.setBorder(null);
-        EH_pos01.setText("Pos01: Costumer99");
+        EH_pos01.setText("Pos01:empty");
         jScrollPane1.setViewportView(EH_pos01);
 
         EH_pos02.setEditable(false);
         EH_pos02.setBorder(null);
-        EH_pos02.setText("Pos02: Costumer99");
+        EH_pos02.setText("Pos02:empty");
         jScrollPane4.setViewportView(EH_pos02);
 
         EH_pos03.setEditable(false);
         EH_pos03.setBorder(null);
-        EH_pos03.setText("Pos03: Costumer99");
+        EH_pos03.setText("Pos03:empty");
         jScrollPane5.setViewportView(EH_pos03);
 
         EH_pos04.setEditable(false);
         EH_pos04.setBorder(null);
-        EH_pos04.setText("Pos04: Costumer99");
+        EH_pos04.setText("Pos04:empty");
         jScrollPane6.setViewportView(EH_pos04);
 
         EH_pos05.setEditable(false);
         EH_pos05.setBorder(null);
-        EH_pos05.setText("Pos05: Costumer99");
+        EH_pos05.setText("Pos05:empty");
+        EH_pos05.setToolTipText("");
         jScrollPane7.setViewportView(EH_pos05);
 
         EH_pos06.setEditable(false);
         EH_pos06.setBorder(null);
-        EH_pos06.setText("Pos06: Costumer99");
+        EH_pos06.setText("Pos06:empty");
         jScrollPane31.setViewportView(EH_pos06);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -347,15 +361,15 @@ public class OIS extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
         CH_01_pos01.setEditable(false);
-        CH_01_pos01.setText("Pos01: Costumer99");
+        CH_01_pos01.setText("Pos01:empty");
         jScrollPane8.setViewportView(CH_01_pos01);
 
         CH_01_pos02.setEditable(false);
-        CH_01_pos02.setText("Pos02: Costumer99");
+        CH_01_pos02.setText("Pos02:empty");
         jScrollPane9.setViewportView(CH_01_pos02);
 
         CH_01_pos03.setEditable(false);
-        CH_01_pos03.setText("Pos03: Costumer99");
+        CH_01_pos03.setText("Pos03:empty");
         jScrollPane10.setViewportView(CH_01_pos03);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -380,15 +394,15 @@ public class OIS extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(153, 153, 153));
 
         CH_02_pos01.setEditable(false);
-        CH_02_pos01.setText("Pos01: Costumer99");
+        CH_02_pos01.setText("Pos01:empty");
         jScrollPane11.setViewportView(CH_02_pos01);
 
         CH_02_pos02.setEditable(false);
-        CH_02_pos02.setText("Pos02: Costumer99");
+        CH_02_pos02.setText("Pos02:empty");
         jScrollPane12.setViewportView(CH_02_pos02);
 
         CH_02_pos03.setEditable(false);
-        CH_02_pos03.setText("Pos03: Costumer99");
+        CH_02_pos03.setText("Pos03:empty");
         jScrollPane13.setViewportView(CH_02_pos03);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -413,15 +427,15 @@ public class OIS extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(153, 153, 153));
 
         CH_03_pos01.setEditable(false);
-        CH_03_pos01.setText("Pos01: Costumer99");
+        CH_03_pos01.setText("Pos01:empty");
         jScrollPane14.setViewportView(CH_03_pos01);
 
         CH_03_pos02.setEditable(false);
-        CH_03_pos02.setText("Pos02: Costumer99");
+        CH_03_pos02.setText("Pos02:empty");
         jScrollPane15.setViewportView(CH_03_pos02);
 
         CH_03_pos03.setEditable(false);
-        CH_03_pos03.setText("Pos03: Costumer99");
+        CH_03_pos03.setText("Pos03:empty");
         jScrollPane16.setViewportView(CH_03_pos03);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -772,9 +786,9 @@ public class OIS extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void OH_allActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OH_allActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_OH_allActionPerformed
 
     /**
      * @param args the command line arguments
@@ -836,6 +850,7 @@ public class OIS extends javax.swing.JFrame {
     private javax.swing.JTextPane EH_pos04;
     private javax.swing.JTextPane EH_pos05;
     private javax.swing.JTextPane EH_pos06;
+    private javax.swing.JTextField OH_all;
     private javax.swing.JTextPane PH_pos01;
     private javax.swing.JTextPane PH_pos02;
     private javax.swing.JTextPane P_pos01;
@@ -891,7 +906,6 @@ public class OIS extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPane17;
     private javax.swing.JTextPane jTextPane2;

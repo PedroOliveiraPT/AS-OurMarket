@@ -1,6 +1,7 @@
 package ActiveEntity;
 
 
+import GUI.GUI_Manager;
 import SACorridor.ICorridor_Customer;
 import SAEntranceHall.IEntranceHall_Customer;
 import SAIdle.IIdle_Customer;
@@ -43,9 +44,13 @@ public class AECustomer extends Thread {
     // área partilhada PaymentPoint
     private final IPaymentPoint_Customer paymentPoint;
     
+//    GUI MANAGER
+    private GUI_Manager gUI_Manager;
+    
     public AECustomer( int customerId, IIdle_Customer idle, IOutsideHall_Customer outsideHall, 
                         IEntranceHall_Customer entranceHall, ICorridorHall_Customer[] corridorHall,
-                        ICorridor_Customer[] corridorShop, IPaymentHall_Customer paymentHall, IPaymentPoint_Customer paymentPoint ) {
+                        ICorridor_Customer[] corridorShop, IPaymentHall_Customer paymentHall, IPaymentPoint_Customer paymentPoint,
+                        GUI_Manager gUI_Manager) {
         this.customerId = customerId; 
         this.idle = idle;
         this.outsideHall = outsideHall;
@@ -54,50 +59,70 @@ public class AECustomer extends Thread {
         this.corridorShop = corridorShop;
         this.paymentHall = paymentHall;
         this.paymentPoint = paymentPoint;
+        this.gUI_Manager = gUI_Manager;
     }
     @Override
     public void run() {
         while ( true ) {
+            // thread avança para Idle
+            // idle.idle(customerId );
+            // se simulação activa (não suspend, não stop, não end), thread avança para o outsideHall
+            System.out.println(this.customerId + " entering Outside Hall");
             try {
-                // thread avança para Idle
-                // idle.idle(customerId );
-                // se simulação activa (não suspend, não stop, não end), thread avança para o outsideHall
-                System.out.println(this.customerId + " entering Outside Hall");
-                outsideHall.in( customerId );
-                TimeUnit.MILLISECONDS.sleep(100);
-                //System.out.println(this.customerId + " entering Entrance Hall");
-                entranceHall.in(customerId);
-                TimeUnit.MILLISECONDS.sleep(100);
-                //System.out.println(this.customerId + " left entrance hall");
-                int curr_index=0;
-                for (int curr=0; curr < corridorHall.length; curr++){
-                    if (!corridorHall[curr].checkFull()){
-                        curr_index = curr;
-                        break;
-                    }
-                }
-                
-                //
-                if (corridorShop[curr_index].checkFull()){
-                    //System.out.println(this.customerId + " entering corridor hall num " + curr_index);
-                    corridorHall[curr_index].in(customerId);
-                    TimeUnit.MILLISECONDS.sleep(100);
-                }
-                corridorShop[curr_index].in(customerId, (SAPaymentHall) this.paymentHall);
-                TimeUnit.MILLISECONDS.sleep(100);
-                //System.out.println(this.customerId + " payment hall ");
-                //corridorShop[curr_index].call();
-                this.paymentHall.in(customerId);
-                TimeUnit.MILLISECONDS.sleep(50);
-                //System.out.println("Paying");
-                this.paymentPoint.in(customerId);
-                System.out.println("Finished shopping" + customerId);
-                
-                break;
-                // mais
+                TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException ex) {
                 Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            outsideHall.in( customerId );
+            gUI_Manager.enterOutsideHall(); // so sabemos k entrou quando entra
+            
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println(this.customerId + " entering Entrance Hall");
+            
+            entranceHall.in(customerId);
+            gUI_Manager.enterEntranceHall(customerId);  // so sabemos k entrou quando entra
+            
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            System.out.println(this.customerId + " left entrance hall");
+            int curr_index=0;
+            for (int curr=0; curr < corridorHall.length; curr++){
+                if (!corridorHall[curr].checkFull()){
+                    curr_index = curr;
+                    break;
+                }
+            }
+                
+            System.out.println(this.customerId + " entering corridor hall num " + curr_index);
+            if (corridorShop[curr_index].checkFull())
+                corridorHall[curr_index].in(customerId);
+            
+            gUI_Manager.enterCorridorHall(customerId, curr_index);
+            
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            corridorShop[curr_index].in(customerId, (SAPaymentHall) this.paymentHall);
+            System.out.println(this.customerId + " shopping ");
+            //corridorShop[curr_index].call();
+            this.paymentHall.in(customerId);
+            System.out.println("Paying");
+            this.paymentPoint.in(customerId);
+            System.out.println("Finished shopping" + customerId);
+                
+                break;
         }
     }
 }

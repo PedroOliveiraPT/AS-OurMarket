@@ -101,6 +101,7 @@ public class AECustomer extends Thread {
                     break;
                 }
             }
+                
             System.out.println(this.customerId + " entering corridor hall num " + curr_index);
             gUI_Manager.enterCorridorHall(customerId, curr_index);           
             if (corridorShop[curr_index].checkFull())
@@ -133,9 +134,8 @@ public class AECustomer extends Thread {
             gUI_Manager.enterPaymentPoint(customerId, curr_index);
             this.paymentPoint.in(customerId);
             System.out.println("Finished shopping" + customerId);
-            
-            break;
-            // mais
+                
+                break;
         }
     }
 }

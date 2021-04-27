@@ -27,13 +27,14 @@ public class SACorridor implements ICorridor_Customer {
     @Override
     public void call() {
         corridor.out();
+        System.out.println("lmao");
         this.corrHall.call();
     }
 
     @Override
     public void in(int customerId, SAPaymentHall ph) {
-        System.out.println(customerId + " shopping time");
         corridor.shop(customerId, ph);
+        this.corrHall.call();
     }
 
     public int getIdxOut() {

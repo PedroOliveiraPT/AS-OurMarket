@@ -77,8 +77,11 @@ public class FIFO implements IFIFO {
             rl.lock();
                                   
             // se fifo cheio, espera na Condition cFull
-            while ( count == maxCustomers )
+            while ( count == maxCustomers ){
+                System.out.println("Can't go in yet");
                 cFull.await();
+
+            }
                                    
             // esta operação não pode ser feita antes da anterior para
             // garantir q o idxIn utilizado é apenas deste Thread activo
@@ -177,6 +180,13 @@ public class FIFO implements IFIFO {
 
     @Override
     public int getCount() {
-        return this.count;
+        int thisCount;
+        rl.lock();
+        try {
+            thisCount = count;
+        } finally {
+            rl.unlock();
+        }
+        return thisCount;
     }
 }

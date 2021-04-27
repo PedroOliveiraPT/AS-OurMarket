@@ -105,12 +105,14 @@ public class CorridorFIFO implements IFIFO {
             // atualizar variável de bloqueio
             leave[ idx ] = false;
             
+            // avisar Manager que Customer vai sair. Manager está à espera na
+            // Condition cLeaving
+            cLeaving.signal();
+            
             // testar se Customer q vai sair é o q está há mais tempo no fifo
             assert idx == ( idxOut == 0 ? maxCustomers - 1 : idxOut - 1 );
             // testar se o id do fifo corresponde ao id do Thread (Customer)
             assert customerId == id;
-            
-            
             
             // se fifo estava cheio, acordar Customer q esteja à espera de entrar
             if ( count == maxCustomers )
@@ -151,7 +153,7 @@ public class CorridorFIFO implements IFIFO {
                 
                 TimeUnit.MILLISECONDS.sleep(100);
                 
-                System.out.println(customerId + "shopping item " + i);
+                //System.out.println(customerId + "shopping item " + i);
                 
                 shopTreadmill[i] = true;
                 
@@ -159,7 +161,7 @@ public class CorridorFIFO implements IFIFO {
             
             // ciclo à espera de autorização para sair do fifo
             while ( paymenthall.checkFull() ){
-                System.out.println("is full, waiting"); 
+                System.out.println("is full, waiting " + customerId); 
                 TimeUnit.MILLISECONDS.sleep(100);
             }
                 // qd se faz await, permite-se q outros thread tenham acesso
@@ -179,6 +181,7 @@ public class CorridorFIFO implements IFIFO {
             rl.lock();
             
             int idx = idxOut;
+            
             // atualizar idxOut
             idxOut = (++idxOut) % maxCustomers; 
             // autorizar a saída do customer q há mais tempo está no fifo

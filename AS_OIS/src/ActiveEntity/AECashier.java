@@ -39,10 +39,13 @@ public class AECashier extends Thread{
                 if (this.paymentHall.getCount() > 0){
                     
                     this.paymentHall.call();
+                    TimeUnit.MILLISECONDS.sleep(100);
+                    
+                    
                     
                     this.paymentPoint.call();
+                    TimeUnit.MILLISECONDS.sleep(100);
                 }
-                TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(AECashier.class.getName()).log(Level.SEVERE, null, ex);
             }

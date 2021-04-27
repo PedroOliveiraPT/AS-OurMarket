@@ -41,10 +41,11 @@ public class GUI_Manager {
         dict = this.outsideHall.getText().split(" ");
         this.outsideHall.setText((Integer.parseInt(dict[0])-1) + " Costumers Waiting");
         
+        String val;
         for (int i=0; i<entranceHallJTextPanes.length; i++){
-            dict = entranceHallJTextPanes[i].getText().split(":");
-            if (dict[1].equalsIgnoreCase("empty")){
-                entranceHallJTextPanes[i].setText("Pos0" + (i + 1) + ":" + costumerId);
+            val = entranceHallJTextPanes[i].getText();
+            if (val.equalsIgnoreCase("empty")){
+                entranceHallJTextPanes[i].setText(costumerId + "");
                 break;
             }
         }
@@ -52,21 +53,86 @@ public class GUI_Manager {
     
     public void enterCorridorHall(int costumerId, int corridor){
         
-        String[] dict;
+        String val;
         for (int i=0; i<entranceHallJTextPanes.length; i++){
-            dict = entranceHallJTextPanes[i].getText().split(":");
-            if (dict[1].equalsIgnoreCase(costumerId + "")){
-                entranceHallJTextPanes[i].setText("Pos0" + (i + 1) + ":" + "empty");
+            val = entranceHallJTextPanes[i].getText();
+            if (val.equalsIgnoreCase(costumerId + "")){
+                entranceHallJTextPanes[i].setText("empty");
                 break;
             }
         }
         
         for (int i=(corridor)*3; i< ((corridor + 1)*3)-1; i++){
             System.out.println("i: " +  i + "; " + corridor);
-            dict = corridorHallJTextPanes[i].getText().split(":");
-            if (dict[1].equalsIgnoreCase("empty")){
-                corridorHallJTextPanes[i].setText("Pos0" + (i + 1) + ":" + costumerId);
+            val = corridorHallJTextPanes[i].getText();
+            if (val.equalsIgnoreCase("empty")){
+                corridorHallJTextPanes[i].setText(costumerId + "");
                 break;
+            }
+        }
+    }
+    
+    public void enterCorridorShop(int costumerId, int corridor){
+        
+        String val;
+
+        for (int i=(corridor)*3; i< ((corridor + 1)*3)-1; i++){
+            val = corridorHallJTextPanes[i].getText();
+            if (val.equalsIgnoreCase(costumerId + "")){
+                corridorHallJTextPanes[i].setText("empty");
+                break;
+            }
+        }
+        
+        for (int i=(corridor)*2; i< ((corridor + 1)*2)-1; i++){
+            val = corridorJTextPanes[i].getText();
+            if (val.equalsIgnoreCase("empty")){
+                corridorJTextPanes[i].setText(costumerId + "");
+                break;
+            }
+        }
+    }
+    
+    public void enterPaymentHall(int costumerId, int corridor){
+        
+        String val;
+
+        for (int i=(corridor)*2; i< ((corridor + 1)*2)-1; i++){
+            val = corridorJTextPanes[i].getText();
+            if (val.equalsIgnoreCase(costumerId+"")){
+                corridorJTextPanes[i].setText("empty");
+                break;
+            }
+        }
+        
+        for (int i=(corridor)*2; i< ((corridor + 1)*2)-1; i++){
+            val = payHallJTextPanes[i].getText();
+            if (val.equalsIgnoreCase("empty")){
+                payHallJTextPanes[i].setText(costumerId +"");
+                break;
+            }
+        }
+    }
+    
+    public void enterPaymentPoint(int costumerId, int corridor){
+        
+        String val;
+
+        for (int i=(corridor)*2; i< ((corridor + 1)*2)-1; i++){
+            val = payHallJTextPanes[i].getText();
+            if (val.equalsIgnoreCase(costumerId+"")){
+                payHallJTextPanes[i].setText("empty");
+                break;
+            }
+        }
+        
+        for (int i=0; i < payJTextPanes.length; i++){
+            val = payJTextPanes[i].getText();
+            if (val.equalsIgnoreCase("empty")){
+                payJTextPanes[i].setText(costumerId+"");
+            }
+            else {
+                System.err.println("ERRO AT PAYMENT");
             }
         }
     }

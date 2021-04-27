@@ -74,8 +74,8 @@ public class AECustomer extends Thread {
                 Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            gUI_Manager.enterOutsideHall(); // so sabemos k entrou quando sai (old comment)
             outsideHall.in( customerId );
-            gUI_Manager.enterOutsideHall(); // so sabemos k entrou quando entra
             
             try {
                 TimeUnit.SECONDS.sleep(2);
@@ -84,8 +84,8 @@ public class AECustomer extends Thread {
             }
             System.out.println(this.customerId + " entering Entrance Hall");
             
-            entranceHall.in(customerId);
             gUI_Manager.enterEntranceHall(customerId);  // so sabemos k entrou quando entra
+            entranceHall.in(customerId);
             
             try {
                 TimeUnit.SECONDS.sleep(2);
@@ -102,10 +102,9 @@ public class AECustomer extends Thread {
                 }
             }
             System.out.println(this.customerId + " entering corridor hall num " + curr_index);
+            gUI_Manager.enterCorridorHall(customerId, curr_index);           
             if (corridorShop[curr_index].checkFull())
                 corridorHall[curr_index].in(customerId);
-            
-            gUI_Manager.enterCorridorHall(customerId, curr_index);
             
             try {
                 TimeUnit.SECONDS.sleep(2);
@@ -113,11 +112,25 @@ public class AECustomer extends Thread {
                 Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            gUI_Manager.enterCorridorShop(customerId, curr_index);
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+            }
             corridorShop[curr_index].in(customerId, (SAPaymentHall) this.paymentHall);
             System.out.println(this.customerId + " shopping ");
             //corridorShop[curr_index].call();
+            
+            gUI_Manager.enterPaymentHall(customerId, curr_index);
             this.paymentHall.in(customerId);
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+            }
             System.out.println("Paying");
+            gUI_Manager.enterPaymentPoint(customerId, curr_index);
             this.paymentPoint.in(customerId);
             System.out.println("Finished shopping" + customerId);
             

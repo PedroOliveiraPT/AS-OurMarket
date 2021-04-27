@@ -1119,9 +1119,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel14">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Lu&#xed;s\Downloads\man (2).png"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="flaticon"/>
       </Properties>
     </Component>

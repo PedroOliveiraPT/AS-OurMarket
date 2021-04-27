@@ -9,6 +9,9 @@ import SACorridorHall.ICorridorHall_Customer;
 import SAPaymentHall.IPaymentHall_Customer;
 import SAPaymentHall.SAPaymentHall;
 import SAPaymentPoint.IPaymentPoint_Customer;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -55,35 +58,46 @@ public class AECustomer extends Thread {
     @Override
     public void run() {
         while ( true ) {
-            // thread avança para Idle
-            // idle.idle(customerId );
-            // se simulação activa (não suspend, não stop, não end), thread avança para o outsideHall
-            System.out.println(this.customerId + " entering Outside Hall");
-            outsideHall.in( customerId );
-            System.out.println(this.customerId + " entering Entrance Hall");
-            entranceHall.in(customerId);
-            System.out.println(this.customerId + " left entrance hall");
-            int curr_index=0;
-            for (int curr=0; curr < corridorHall.length; curr++){
-                if (!corridorHall[curr].checkFull()){
-                    curr_index = curr;
-                    break;
+            try {
+                // thread avança para Idle
+                // idle.idle(customerId );
+                // se simulação activa (não suspend, não stop, não end), thread avança para o outsideHall
+                System.out.println(this.customerId + " entering Outside Hall");
+                outsideHall.in( customerId );
+                TimeUnit.MILLISECONDS.sleep(100);
+                //System.out.println(this.customerId + " entering Entrance Hall");
+                entranceHall.in(customerId);
+                TimeUnit.MILLISECONDS.sleep(100);
+                //System.out.println(this.customerId + " left entrance hall");
+                int curr_index=0;
+                for (int curr=0; curr < corridorHall.length; curr++){
+                    if (!corridorHall[curr].checkFull()){
+                        curr_index = curr;
+                        break;
+                    }
                 }
+                
+                //
+                if (corridorShop[curr_index].checkFull()){
+                    //System.out.println(this.customerId + " entering corridor hall num " + curr_index);
+                    corridorHall[curr_index].in(customerId);
+                    TimeUnit.MILLISECONDS.sleep(100);
+                }
+                corridorShop[curr_index].in(customerId, (SAPaymentHall) this.paymentHall);
+                TimeUnit.MILLISECONDS.sleep(100);
+                //System.out.println(this.customerId + " payment hall ");
+                //corridorShop[curr_index].call();
+                this.paymentHall.in(customerId);
+                TimeUnit.MILLISECONDS.sleep(50);
+                //System.out.println("Paying");
+                this.paymentPoint.in(customerId);
+                System.out.println("Finished shopping" + customerId);
+                
+                break;
+                // mais
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println(this.customerId + " entering corridor hall num " + curr_index);
-            if (corridorShop[curr_index].checkFull())
-                corridorHall[curr_index].in(customerId);
-            
-            corridorShop[curr_index].in(customerId, (SAPaymentHall) this.paymentHall);
-            System.out.println(this.customerId + " shopping ");
-            //corridorShop[curr_index].call();
-            this.paymentHall.in(customerId);
-            System.out.println("Paying");
-            this.paymentPoint.in(customerId);
-            System.out.println("Finished shopping" + customerId);
-            
-            break;
-            // mais
         }
     }
 }

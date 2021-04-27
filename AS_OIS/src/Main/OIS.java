@@ -54,7 +54,7 @@ public class OIS extends javax.swing.JFrame {
      * Creates new form OIS
      */
     public OIS() {
-        initComponents();
+        //initComponents();
         
 
 
@@ -63,7 +63,7 @@ public class OIS extends javax.swing.JFrame {
         initOIS();
     }
     private void initOIS() {
-        final int MAX_CUSTOMERS = 2;
+        final int MAX_CUSTOMERS = 90;
         final int N_CORRIDOR_HALL = 3;
         final int N_CORRIDOR = 3;
         final int SIZE_ENTRANCE_HALL = 6;
@@ -117,12 +117,12 @@ public class OIS extends javax.swing.JFrame {
         
         // ...
         
-//        try {
-//            aeManager.join();
-//            for ( int i = 0; i < MAX_CUSTOMERS; i++ )
-//                aeCustomer[ i ].join();
-//            aeCashier.join();
-//        } catch ( Exception ex ) {}    
+        try {
+            aeManager.join();
+            for ( int i = 0; i < MAX_CUSTOMERS; i++ )
+                aeCustomer[ i ].join();
+            aeCashier.join();
+        } catch ( Exception ex ) {}    
         
         System.out.println("Finished simulation");
             

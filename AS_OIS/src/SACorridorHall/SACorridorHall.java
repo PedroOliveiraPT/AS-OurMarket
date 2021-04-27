@@ -30,5 +30,9 @@ public class SACorridorHall implements ICorridorHall_Customer, ICorridorHall_Man
     public boolean checkFull(){
         return this.saCorridorHall.full();
     }
+    
+    public int getCount(){
+        return this.saCorridorHall.getCount();
+    }
 
 }

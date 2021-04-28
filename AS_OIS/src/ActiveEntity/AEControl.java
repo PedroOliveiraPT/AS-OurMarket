@@ -53,7 +53,7 @@ public class AEControl extends Thread {
                 this.pause();
             } else if (msg.equals("resume")) {
                 this.resumeRun();
-            } else if (msg.equals("stop")){
+            } else if (msg.startsWith("stop")){
                 this.end();
             }
         

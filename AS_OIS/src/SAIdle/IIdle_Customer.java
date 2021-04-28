@@ -5,10 +5,14 @@
  */
 package SAIdle;
 
+import ActiveEntity.AECustomer;
+import ActiveEntity.StatusCustomer;
 /**
  *
  * @author omp
  */
 public interface IIdle_Customer {
-    public void idle( int customerId );
+    public StatusCustomer idle( int customerId );
+    public void pause();
+    public void update(AECustomer aec);
 }

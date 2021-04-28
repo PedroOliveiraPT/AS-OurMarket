@@ -5,6 +5,10 @@
  */
 package SAIdle;
 
+import ActiveEntity.AECustomer;
+import ActiveEntity.StatusCashier;
+import ActiveEntity.StatusCustomer;
+import ActiveEntity.StatusManager;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -31,6 +35,14 @@ public class SAIdle implements IIdle_Customer,
     private boolean manIdle;
     private boolean cashIdle;
 
+    private int maxCustomers;
+    
+    private int manCounter;
+    private int cashCounter;
+    
+    private boolean pause;
+    private boolean end;
+    private boolean reset;
     public SAIdle( int maxCustomers ) {
         cCustomerIdle = new Condition[maxCustomers];
         for ( int i = 0; i < maxCustomers; i++ ) {
@@ -42,10 +54,17 @@ public class SAIdle implements IIdle_Customer,
         
         manIdle = true;
         cashIdle = true;
+        
+        this.maxCustomers = maxCustomers;
+        
+        manCounter = 0;
+        cashCounter = 0;
+        reset = false;
+        this.pause = true;
     }
     @Override
-    public void idle() {
-        if (!manIdle) return;
+    public StatusManager idle() {
+        if (manCounter <= maxCustomers && !pause) return null;
         try {
             rl.lock();
             
@@ -55,9 +74,12 @@ public class SAIdle implements IIdle_Customer,
         finally {
             rl.unlock();
         }
+        if (reset || manCounter > maxCustomers) return StatusManager.IDLE;
+        return null;
     }
     @Override
-    public void idle( int customerId ) {
+    public StatusCustomer idle( int customerId ) {
+        if (!pause) return null;
         
         try {
             rl.lock();
@@ -69,11 +91,13 @@ public class SAIdle implements IIdle_Customer,
         finally {
             rl.unlock();
         }
+        if (reset) return StatusCustomer.IDLE;
+        return null;
     }
     
     @Override
-    public void idleCashier() {
-        if (!cashIdle) return;
+    public StatusCashier idleCashier() {
+        if (cashCounter <= maxCustomers && !pause) return null;
         try {
             rl.lock();
             
@@ -83,13 +107,16 @@ public class SAIdle implements IIdle_Customer,
         finally {
             rl.unlock();
         }
+        if (reset || cashCounter > maxCustomers) return StatusCashier.IDLE;
+        return null;
     }
     
     @Override
     public void start( int nCustmers ) {
-        System.out.println("waking up ppl");
         cashIdle = false;
         manIdle = false;
+        pause = false;
+        this.maxCustomers = nCustmers;
         try {
             rl.lock();
             cCashierIdle.signal();
@@ -105,12 +132,37 @@ public class SAIdle implements IIdle_Customer,
         } catch (Exception ex) {}
         finally {
             rl.unlock();
-        }
-        
+        }        
+    }
+    
+    @Override
+    public void pause(){
+        this.pause = true;
         
     }
     @Override
-    public void end() {   
+    public void end() {
+        this.reset = true;
+    }
+    
+    @Override
+    public void resume(){
+        this.start(this.maxCustomers);
+    }
+
+    @Override
+    public void update(AECustomer aec) {
+        
+    }
+
+    @Override
+    public void managerIncrementCounter() {
+        this.manCounter+=1;
+    }
+
+    @Override
+    public void cashierIncrement() {
+        this.cashCounter += 1;
     }
 
    

@@ -29,6 +29,8 @@ public class AECashier extends Thread{
     //    GUI MANAGER
     private GUI_Manager gUI_Manager;
     
+    private StatusCashier stCashier;
+    
     public AECashier(int maxCustomers, IIdle_Cashier idle, IPaymentHall_Cashier paymentHall, 
             IPaymentPoint_Cashier entranceHall, GUI_Manager gUI_Manager){
         this.idle = idle;
@@ -36,26 +38,40 @@ public class AECashier extends Thread{
         this.paymentPoint = entranceHall;
         this.maxCustomers = maxCustomers;
         this.gUI_Manager = gUI_Manager;
+        this.stCashier = StatusCashier.IDLE;
     }
     
     @Override
     public void run() {
         //local vars
         int paidCustomers = 0;
+        StatusCashier temp;
         while (true){
             try {
                 gUI_Manager.moveCashier(0);
-                this.idle.idleCashier();
+                temp = this.idle.idleCashier();
+                stCashier = (temp==null)? stCashier:temp;
+                if (stCashier == StatusCashier.IDLE){
+                    stCashier = StatusCashier.PAYMENTHALL;
+                }
                 if (this.paymentHall.getCount() > 0){
-                    gUI_Manager.moveCashier(1);
-                    this.paymentHall.call();
-                    TimeUnit.MILLISECONDS.sleep(100);
                     
+                    if (stCashier == StatusCashier.PAYMENTHALL){
+                        gUI_Manager.moveCashier(1);
+                        this.paymentHall.call();
+                        stCashier = StatusCashier.PAYMENTPOINT;
+                        TimeUnit.MILLISECONDS.sleep(100);
                     
-                    gUI_Manager.moveCashier(0);
-                    this.paymentPoint.call();
-                    paidCustomers += 1;
-                    TimeUnit.MILLISECONDS.sleep(100);
+                    }
+                    
+                    if (stCashier == StatusCashier.PAYMENTPOINT){
+                        gUI_Manager.moveCashier(0);
+                        this.paymentPoint.call();
+                        stCashier = StatusCashier.PAYMENTHALL;
+                        this.idle.cashierIncrement();
+                        TimeUnit.MILLISECONDS.sleep(100);
+                    }
+                    
                 }
                 
                 if (paidCustomers == maxCustomers) this.idle.idleCashier();

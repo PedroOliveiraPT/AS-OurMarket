@@ -917,7 +917,7 @@ public class OCC extends javax.swing.JFrame {
         });
 
         manager_status.setEditable(false);
-        manager_status.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        manager_status.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         manager_status.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         manager_status.setText("IDLE");
 
@@ -1001,7 +1001,7 @@ public class OCC extends javax.swing.JFrame {
         jLabel1.setText("Cashier");
 
         cashier_status.setEditable(false);
-        cashier_status.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        cashier_status.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         cashier_status.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         cashier_status.setText("IDLE");
 

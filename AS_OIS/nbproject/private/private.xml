@@ -4,17 +4,19 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/SAIdle/IIdle_Manager.java</file>
+            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/GUI/GUI_Manager.java</file>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/Main/OIS.java</file>
-            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/AECashier.java</file>
+            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/SAIdle/IIdle_Control.java</file>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/AEControl.java</file>
-            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/SAIdle/SAIdle.java</file>
-            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/StatusCashier.java</file>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/AECustomer.java</file>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/AEManager.java</file>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/SAIdle/IIdle_Cashier.java</file>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/StatusManager.java</file>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/StatusCustomer.java</file>
             <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/SAIdle/IIdle_Customer.java</file>
+            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/AECashier.java</file>
+            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/SAIdle/SAIdle.java</file>
+            <file>file:/C:/Users/pedro/OneDrive/Documentos/UA/4oAno/AS-OurMarket/AS_OIS/src/ActiveEntity/StatusCashier.java</file>
         </group>
     </open-files>
 </project-private>

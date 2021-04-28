@@ -43,6 +43,7 @@ public class SAIdle implements IIdle_Customer,
     private boolean pause;
     private boolean end;
     private boolean reset;
+    private boolean[] custDone;
     public SAIdle( int maxCustomers ) {
         cCustomerIdle = new Condition[maxCustomers];
         for ( int i = 0; i < maxCustomers; i++ ) {
@@ -79,7 +80,7 @@ public class SAIdle implements IIdle_Customer,
     }
     @Override
     public StatusCustomer idle( int customerId ) {
-        if (!pause) return null;
+        if (custDone != null && !custDone[customerId] && !pause) return null;
         
         try {
             rl.lock();
@@ -117,6 +118,8 @@ public class SAIdle implements IIdle_Customer,
         manIdle = false;
         pause = false;
         this.maxCustomers = nCustmers;
+        custDone = new boolean[nCustmers];
+        for (int i = 0; i < nCustmers; i++) custDone[i] = false;
         try {
             rl.lock();
             cCashierIdle.signal();
@@ -151,11 +154,6 @@ public class SAIdle implements IIdle_Customer,
     }
 
     @Override
-    public void update(AECustomer aec) {
-        
-    }
-
-    @Override
     public void managerIncrementCounter() {
         this.manCounter+=1;
     }
@@ -163,6 +161,11 @@ public class SAIdle implements IIdle_Customer,
     @Override
     public void cashierIncrement() {
         this.cashCounter += 1;
+    }
+
+    @Override
+    public void setCustDone(int customerId) {
+        this.custDone[customerId] = true;
     }
 
    

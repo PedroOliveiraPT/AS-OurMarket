@@ -78,7 +78,7 @@ public class OIS extends javax.swing.JFrame {
         
         System.out.println("Preparing OIS");
 
-        final int MAX_CUSTOMERS = 75;
+        final int MAX_CUSTOMERS = 99;
         final int N_CORRIDOR_HALL = 3;
         final int N_CORRIDOR = 3;
         final int SIZE_ENTRANCE_HALL = 6;

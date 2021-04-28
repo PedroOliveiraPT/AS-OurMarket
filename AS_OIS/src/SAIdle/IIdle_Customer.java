@@ -13,6 +13,5 @@ import ActiveEntity.StatusCustomer;
  */
 public interface IIdle_Customer {
     public StatusCustomer idle( int customerId );
-    public void pause();
     public void setCustDone(int customerId);
 }

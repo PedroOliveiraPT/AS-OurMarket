@@ -24,6 +24,13 @@ public class AEControl extends Thread {
     public void start( int nCustomers /*, Socket socket */) {
         idle.start( nCustomers );
     }
+    
+    public void pause(){
+        this.idle.pause();
+    }
+    public void resumeRun(){
+        this.idle.resume();
+    }
     public void end() {
         // terminar Customers em idle
         idle.end();
@@ -42,9 +49,14 @@ public class AEControl extends Thread {
             if (msg.startsWith("start")){   // n verifico se manda 1 start durante 1 execução: supoe-se k isso n acontece
                 args = msg.split("#");
                 start(Integer.parseInt(args[1]));
-            } else if (msg.equalsIgnoreCase("anything")){
-                System.out.println("PEDRO DO");
+            } else if (msg.equals("suspend")){
+                this.pause();
+            } else if (msg.equals("resume")) {
+                this.resumeRun();
+            } else if (msg.equals("stop")){
+                this.end();
             }
+        
         }
     }
 }

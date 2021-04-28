@@ -65,6 +65,7 @@ public class SAIdle implements IIdle_Customer,
     }
     @Override
     public StatusManager idle() {
+        if (reset || manCounter > maxCustomers) return StatusManager.IDLE;
         if (manCounter <= maxCustomers && !pause) return null;
         try {
             rl.lock();
@@ -75,11 +76,12 @@ public class SAIdle implements IIdle_Customer,
         finally {
             rl.unlock();
         }
-        if (reset || manCounter > maxCustomers) return StatusManager.IDLE;
+        
         return null;
     }
     @Override
     public StatusCustomer idle( int customerId ) {
+        if (reset) return StatusCustomer.IDLE;
         if (custDone != null && !custDone[customerId] && !pause) return null;
         
         try {
@@ -92,12 +94,13 @@ public class SAIdle implements IIdle_Customer,
         finally {
             rl.unlock();
         }
-        if (reset) return StatusCustomer.IDLE;
+        
         return null;
     }
     
     @Override
     public StatusCashier idleCashier() {
+        if (reset || cashCounter > maxCustomers) return StatusCashier.IDLE;
         if (cashCounter <= maxCustomers && !pause) return null;
         try {
             rl.lock();
@@ -108,7 +111,6 @@ public class SAIdle implements IIdle_Customer,
         finally {
             rl.unlock();
         }
-        if (reset || cashCounter > maxCustomers) return StatusCashier.IDLE;
         return null;
     }
     

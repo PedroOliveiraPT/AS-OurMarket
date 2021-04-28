@@ -169,6 +169,7 @@ public class AECustomer extends Thread {
                 gUI_Manager.leaveStore(customerId);
                 cClient.send(this.customerId + "#idle");
                 this.stCustomer = StatusCustomer.IDLE;
+                this.idle.setCustDone(customerId);
             }
 
         }

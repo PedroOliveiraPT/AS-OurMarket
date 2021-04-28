@@ -36,9 +36,12 @@ public class AEControl extends Thread {
     public void run() {
         while(true){
             String msg = cServer.get(); // thread blocks here
+            String args[];
             System.out.println("Received: " + msg);
-            if (msg.equalsIgnoreCase("start")){   // n verifico se manda 1 start durante 1 execução: supoe-se k isso n acontece
-                start(75); 
+            msg = msg.toLowerCase();
+            if (msg.startsWith("start")){   // n verifico se manda 1 start durante 1 execução: supoe-se k isso n acontece
+                args = msg.split("#");
+                start(Integer.parseInt(args[1]));
             } else if (msg.equalsIgnoreCase("anything")){
                 System.out.println("PEDRO DO");
             }

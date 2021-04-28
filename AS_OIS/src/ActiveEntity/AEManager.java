@@ -38,6 +38,8 @@ public class AEManager extends Thread {
 
     private CClient cClient;
     private StatusManager stManager;
+    
+    private int sto = 100;
 
     public AEManager(int maxCustomers, IIdle_Manager idle, IOutsideHall_Manager outsideHall, 
             IEntranceHall_Manager entranceHall, ICorridorHall_Manager[] corridorHalls,
@@ -51,7 +53,11 @@ public class AEManager extends Thread {
 
         this.cClient = cClient;
         this.stManager = StatusManager.IDLE;
-
+        
+    }
+    
+    public void setSto(int sto){
+        this.sto  = sto;
     }
     
     @Override
@@ -78,7 +84,7 @@ public class AEManager extends Thread {
                         gUI_Manager.moveManager(1);
                         cClient.send("manager#outsidehall");
                         this.outsideHall.call();
-                        TimeUnit.MILLISECONDS.sleep(100);
+                        TimeUnit.MILLISECONDS.sleep(sto);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(AEManager.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -94,7 +100,7 @@ public class AEManager extends Thread {
                             gUI_Manager.moveManager(2);
                             cClient.send("manager#entrancehall");
                             this.entranceHall.call();
-                            TimeUnit.MILLISECONDS.sleep(100);
+                            TimeUnit.MILLISECONDS.sleep(sto);
                             this.idle.managerIncrementCounter();
                         } catch (InterruptedException ex) {
                             Logger.getLogger(AEManager.class.getName()).log(Level.SEVERE, null, ex);

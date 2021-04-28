@@ -3,6 +3,7 @@
 package ActiveEntity;
 
 import Communication.CServer;
+import SACorridor.SACorridor;
 import SAIdle.IIdle_Control;
 import java.net.Socket;
 
@@ -17,9 +18,15 @@ public class AEControl extends Thread {
     private final IIdle_Control idle;
     private CServer cServer;
     
-    public AEControl( IIdle_Control idle, CServer cServer /* mais áreas partilhadas */ ) {
+    private SACorridor[] sACorridor;
+    private AEManager aem;
+    
+    public AEControl( IIdle_Control idle, CServer cServer, SACorridor[] sAC, AEManager aem) {
         this.idle = idle;
         this.cServer = cServer;
+        
+        this.sACorridor = sAC;
+        this.aem = aem;
     }
     public void start( int nCustomers /*, Socket socket */) {
         idle.start( nCustomers );
@@ -48,6 +55,13 @@ public class AEControl extends Thread {
             msg = msg.toLowerCase();
             if (msg.startsWith("start")){   // n verifico se manda 1 start durante 1 execução: supoe-se k isso n acontece
                 args = msg.split("#");
+                int cto = Integer.parseInt(args[2]);
+                for (SACorridor sACorridor1 : sACorridor) {
+                    sACorridor1.setCto(cto);    
+                }
+                int sto = Integer.parseInt(args[3]);
+                aem.setSto(sto);
+                
                 start(Integer.parseInt(args[1]));
             } else if (msg.equals("suspend")){
                 this.pause();

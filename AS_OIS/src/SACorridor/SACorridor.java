@@ -18,6 +18,12 @@ public class SACorridor implements ICorridor_Customer {
     private CorridorFIFO corridor;
     private SACorridorHall corrHall;
     
+    private int cto = 100;
+
+    public void setCto(int cto) {
+        this.cto = cto;
+    }
+    
     public SACorridor(int maxCustomers, SACorridorHall corr) {
         this.corridor = new CorridorFIFO(maxCustomers);
         this.corrHall = corr;
@@ -27,13 +33,12 @@ public class SACorridor implements ICorridor_Customer {
     @Override
     public void call() {
         corridor.out();
-        System.out.println("lmao");
         this.corrHall.call();
     }
 
     @Override
     public void in(int customerId, SAPaymentHall ph) {
-        corridor.shop(customerId, ph);
+        corridor.shop(customerId, ph, cto);
         this.corrHall.call();
     }
 

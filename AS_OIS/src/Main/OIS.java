@@ -96,9 +96,6 @@ public class OIS extends javax.swing.JFrame {
         final SAPaymentHall paymentHall = new SAPaymentHall(SIZE_PAYMENT_HALL, corridors);
         final SAPaymentPoint paymentPoint = new SAPaymentPoint(SIZE_PAYMENT_POINT);
         
-        AEControl aEControl = new AEControl(idle, cServer);
-        aEControl.start();
-
         
         GUI_Manager guim = new GUI_Manager(OH_all, entranceHallJTextPanes, corridorHallJTextPanes, corridorJTextPanes, 
                 payHallJTextPanes, payJTextPanes, managerPanes, cashierPanes);
@@ -134,6 +131,11 @@ public class OIS extends javax.swing.JFrame {
             );
             aeCustomer[ i ].start();
         }
+        
+                                            //timeouts:   |costumer  |manager
+        AEControl aEControl = new AEControl(idle, cServer, corridors, aeManager);
+        aEControl.start();
+        
         aeCashier.start();
         aeManager.start();
         System.out.println("Awaiting...");

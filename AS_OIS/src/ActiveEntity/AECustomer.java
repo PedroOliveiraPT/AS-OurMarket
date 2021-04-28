@@ -93,11 +93,7 @@ public class AECustomer extends Thread {
             
             if (this.stCustomer == StatusCustomer.OUTSIDE) {
                 System.out.println(this.customerId + " entering Outside Hall");
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
                 gUI_Manager.enterOutsideHall();
                 cClient.send(this.customerId + "#outsidehall");
                 outsideHall.in( customerId );
@@ -105,11 +101,7 @@ public class AECustomer extends Thread {
             }
             
             if (this.stCustomer == StatusCustomer.ENTRANCE) {
-                try {
-                    TimeUnit.SECONDS.sleep(0);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
                 System.out.println(this.customerId + " entering Entrance Hall");
 
                 gUI_Manager.enterEntranceHall(customerId);

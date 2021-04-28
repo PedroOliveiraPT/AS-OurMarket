@@ -74,14 +74,12 @@ public class OCC extends javax.swing.JFrame {
         suspendResumeButton = new javax.swing.JToggleButton();
         endButton = new javax.swing.JToggleButton();
         jTextField1 = new javax.swing.JTextField();
-        warningsLabel = new java.awt.Label();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         label1 = new java.awt.Label();
         label4 = new java.awt.Label();
         settingsNoCustumers = new java.awt.TextField();
         label5 = new java.awt.Label();
-        settingsCostumerTime = new java.awt.TextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -147,18 +145,19 @@ public class OCC extends javax.swing.JFrame {
         c_pos48 = new java.awt.Label();
         c_pos49 = new java.awt.Label();
         c_pos50 = new java.awt.Label();
+        settingsCostumerTime = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         label2 = new java.awt.Label();
         label6 = new java.awt.Label();
         label7 = new java.awt.Label();
-        settingsOpTime = new java.awt.TextField();
         settingsMode = new javax.swing.JComboBox<>();
         manager_status = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         label9 = new java.awt.Label();
+        settingsOpTime = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cashier_status = new javax.swing.JTextField();
@@ -250,9 +249,6 @@ public class OCC extends javax.swing.JFrame {
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setText("00:30");
 
-        warningsLabel.setBackground(new java.awt.Color(255, 227, 222));
-        warningsLabel.setForeground(new java.awt.Color(51, 51, 51));
-
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -268,7 +264,6 @@ public class OCC extends javax.swing.JFrame {
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(endButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(startStopButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(warningsLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(suspendResumeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(28, 28, 28))))
         );
@@ -283,8 +278,6 @@ public class OCC extends javax.swing.JFrame {
                 .addComponent(endButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(warningsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -308,14 +301,6 @@ public class OCC extends javax.swing.JFrame {
         });
 
         label5.setText("Customers' Timeout");
-
-        settingsCostumerTime.setForeground(new java.awt.Color(51, 51, 51));
-        settingsCostumerTime.setText("5");
-        settingsCostumerTime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settingsCostumerTimeActionPerformed(evt);
-            }
-        });
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -350,37 +335,30 @@ public class OCC extends javax.swing.JFrame {
         label10.setAlignment(java.awt.Label.CENTER);
         label10.setBackground(new java.awt.Color(153, 153, 153));
         label10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        label10.setText("30");
 
         label11.setAlignment(java.awt.Label.CENTER);
         label11.setBackground(new java.awt.Color(255, 0, 0));
         label11.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        label11.setText("30");
 
         label12.setAlignment(java.awt.Label.CENTER);
         label12.setBackground(new java.awt.Color(255, 204, 0));
         label12.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        label12.setText("30");
 
         label13.setAlignment(java.awt.Label.CENTER);
         label13.setBackground(new java.awt.Color(0, 0, 204));
         label13.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        label13.setText("30");
 
         label14.setAlignment(java.awt.Label.CENTER);
         label14.setBackground(new java.awt.Color(255, 0, 255));
         label14.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        label14.setText("30");
 
         label15.setAlignment(java.awt.Label.CENTER);
         label15.setBackground(new java.awt.Color(0, 153, 0));
         label15.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        label15.setText("30");
 
         label16.setAlignment(java.awt.Label.CENTER);
         label16.setBackground(new java.awt.Color(255, 255, 255));
         label16.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        label16.setText("30");
 
         c_pos1.setAlignment(java.awt.Label.CENTER);
         c_pos1.setBackground(new java.awt.Color(153, 153, 153));
@@ -632,6 +610,9 @@ public class OCC extends javax.swing.JFrame {
         c_pos50.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         c_pos50.setText("Costumer00");
 
+        settingsCostumerTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "100", "250", "500", "1000" }));
+        settingsCostumerTime.setSelectedIndex(1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -640,11 +621,16 @@ public class OCC extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(label4, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(label5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(settingsCostumerTime, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(settingsNoCustumers, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(settingsCostumerTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(settingsNoCustumers, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -884,7 +870,7 @@ public class OCC extends javax.swing.JFrame {
                             .addComponent(c_pos48, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(c_pos49, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(c_pos50, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 35, 42));
@@ -899,15 +885,6 @@ public class OCC extends javax.swing.JFrame {
         label6.setText("Supervisor's Mode");
 
         label7.setText("Operating Time");
-
-        settingsOpTime.setEnabled(false);
-        settingsOpTime.setForeground(new java.awt.Color(51, 51, 51));
-        settingsOpTime.setText("5");
-        settingsOpTime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settingsOpTimeActionPerformed(evt);
-            }
-        });
 
         settingsMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Auto" }));
         settingsMode.addActionListener(new java.awt.event.ActionListener() {
@@ -934,6 +911,9 @@ public class OCC extends javax.swing.JFrame {
         label9.setBackground(new java.awt.Color(0, 0, 0));
         label9.setFont(new java.awt.Font("Dialog", 0, 100)); // NOI18N
 
+        settingsOpTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "100", "250", "500", "1000", "2500", "5000" }));
+        settingsOpTime.setSelectedIndex(1);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -943,10 +923,9 @@ public class OCC extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(label7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(settingsOpTime, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(settingsMode, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(settingsMode, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(settingsOpTime, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
@@ -974,7 +953,7 @@ public class OCC extends javax.swing.JFrame {
                 .addComponent(settingsMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(settingsOpTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(label2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1465,7 +1444,7 @@ public class OCC extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1477,23 +1456,21 @@ public class OCC extends javax.swing.JFrame {
                                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(34, Short.MAX_VALUE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel4)
-                        .addGap(292, 292, 292))))
+                        .addGap(258, 258, 258)))
+                .addGap(22, 22, 22))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(86, 86, 86)
+                .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1502,10 +1479,9 @@ public class OCC extends javax.swing.JFrame {
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())))))
+                                .addGap(24, 24, 24))
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
 
         pack();
@@ -1515,9 +1491,9 @@ public class OCC extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("Toggle: " + evt.getActionCommand());
         String manager_mode =  (String) settingsMode.getSelectedItem();
-        String manager_time = settingsOpTime.getText();
+        String manager_time = settingsOpTime.getSelectedItem().toString();
         String costumers_no = settingsNoCustumers.getText();
-        String costumers_time = settingsCostumerTime.getText();
+        String costumers_time = settingsCostumerTime.getSelectedItem().toString();
         System.out.println("Start # " + costumers_no + " # " + costumers_time + " # " + manager_mode + " # " + manager_time);
         cClient.send(evt.getActionCommand()+"#"+costumers_no+"#"+costumers_time+"#"+manager_time);
         if ("Start".equals(evt.getActionCommand())){
@@ -1547,21 +1523,13 @@ public class OCC extends javax.swing.JFrame {
         startStopButton.setText("Start");
     }//GEN-LAST:event_endButtonActionPerformed
 
-    private void settingsOpTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsOpTimeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_settingsOpTimeActionPerformed
-
-    private void settingsCostumerTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCostumerTimeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_settingsCostumerTimeActionPerformed
-
     private void settingsNoCustumersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsNoCustumersActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_settingsNoCustumersActionPerformed
 
     private void settingsModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsModeActionPerformed
 
-        if ("Manual".equalsIgnoreCase((String) settingsMode.getSelectedItem())){
+        if ("Manual".equalsIgnoreCase((String) settingsMode.getSelectedItem())){ // fica pa proxima
             settingsOpTime.setEnabled(true);
         } else {
             settingsOpTime.setEnabled(false);
@@ -1744,12 +1712,11 @@ public class OCC extends javax.swing.JFrame {
     private java.awt.Label label7;
     private java.awt.Label label9;
     private javax.swing.JTextField manager_status;
-    private java.awt.TextField settingsCostumerTime;
+    private javax.swing.JComboBox<String> settingsCostumerTime;
     private javax.swing.JComboBox<String> settingsMode;
     private java.awt.TextField settingsNoCustumers;
-    private java.awt.TextField settingsOpTime;
+    private javax.swing.JComboBox<String> settingsOpTime;
     private javax.swing.JToggleButton startStopButton;
     private javax.swing.JToggleButton suspendResumeButton;
-    private java.awt.Label warningsLabel;
     // End of variables declaration//GEN-END:variables
 }

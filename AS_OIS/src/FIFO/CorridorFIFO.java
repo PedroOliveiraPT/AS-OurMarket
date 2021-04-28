@@ -129,7 +129,7 @@ public class CorridorFIFO implements IFIFO {
         return id;
     }
     
-    public void shop(int customerId, SAPaymentHall paymenthall) {
+    public void shop(int customerId, SAPaymentHall paymenthall, int cto) {
         try {
             // variáveis locais
             int idx;
@@ -151,7 +151,7 @@ public class CorridorFIFO implements IFIFO {
                 
                 shopTreadmill[i] = false;
                 
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(cto);
                 
                 //System.out.println(customerId + "shopping item " + i);
                 

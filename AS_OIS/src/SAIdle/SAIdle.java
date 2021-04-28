@@ -27,6 +27,9 @@ public class SAIdle implements IIdle_Customer,
     private final Condition cCashierIdle;
     
     private final Condition cWaking;
+    
+    private boolean manIdle;
+    private boolean cashIdle;
 
     public SAIdle( int maxCustomers ) {
         cCustomerIdle = new Condition[maxCustomers];
@@ -36,13 +39,18 @@ public class SAIdle implements IIdle_Customer,
         cManagerIdle = rl.newCondition();
         cCashierIdle = rl.newCondition();
         cWaking = rl.newCondition();
+        
+        manIdle = true;
+        cashIdle = true;
     }
     @Override
     public void idle() {
+        if (!manIdle) return;
         try {
             rl.lock();
             
             cManagerIdle.await();
+            cWaking.signal();
         } catch (Exception ex) {}
         finally {
             rl.unlock();
@@ -50,6 +58,7 @@ public class SAIdle implements IIdle_Customer,
     }
     @Override
     public void idle( int customerId ) {
+        
         try {
             rl.lock();
             
@@ -64,10 +73,12 @@ public class SAIdle implements IIdle_Customer,
     
     @Override
     public void idleCashier() {
+        if (!cashIdle) return;
         try {
             rl.lock();
             
             cCashierIdle.await();
+            cWaking.signal();
         } catch (Exception ex) {}
         finally {
             rl.unlock();
@@ -76,6 +87,9 @@ public class SAIdle implements IIdle_Customer,
     
     @Override
     public void start( int nCustmers ) {
+        System.out.println("waking up ppl");
+        cashIdle = false;
+        manIdle = false;
         try {
             rl.lock();
             cCashierIdle.signal();

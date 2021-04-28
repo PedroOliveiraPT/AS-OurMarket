@@ -11,36 +11,45 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Criar Server para receber info do OIS.
  * @author omp
  */
-public class CServer extends Thread {
+public class CServer{
     private int portNumber;
+    
+    private Socket clientSocket;
+    
+    private BufferedReader in;
 
     public CServer(int portNumber) {
         this.portNumber = portNumber;
     }
     
-    @Override
-    public void run(){
+    public String get(){
+        try {
+            String a = in.readLine();
+            return a;
+        } catch (IOException ex) {
+            Logger.getLogger(CServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public void connect(){
         
         System.out.println("Initiating OCC Side Server...");
-        try (
+        try{
             ServerSocket serverSocket =
                 new ServerSocket(this.portNumber);
-            Socket clientSocket = serverSocket.accept();     
-            PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);                   
-            BufferedReader in = new BufferedReader(
+            this.clientSocket = serverSocket.accept();     
+                 
+            this.in = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
-        ) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                out.println(inputLine + "no");
-                System.out.println(">>" + inputLine);
-            }
+            System.out.println("Connection Accepted!");
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                 + portNumber + " or listening for a connection");

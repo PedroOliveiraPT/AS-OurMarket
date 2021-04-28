@@ -7,6 +7,7 @@ package Main;
 
 import Communication.CClient;
 import Communication.CServer;
+import GUI.GUI_Manager;
 import java.awt.Color;
 import java.net.Socket;
 
@@ -14,16 +15,18 @@ import java.net.Socket;
  * @author omp
  */
 public class OCC extends javax.swing.JFrame {
-    
+    private CServer cServer;
     private CClient cClient;
     
+    private java.awt.Label[] costumersLabels;
+    
     /**
-     * Creates new form OIS
+     * Creates new form OOC
      */
     public OCC() {
         initComponents();
         
-        java.awt.Label[] costumersLabels = {
+        costumersLabels = new java.awt.Label[]{
             c_pos1, c_pos2, c_pos3, c_pos4, c_pos5, c_pos6, c_pos7, c_pos8, c_pos9,c_pos10,
             c_pos11,c_pos12,c_pos13,c_pos14,c_pos15,c_pos16,c_pos17,c_pos18,c_pos19,c_pos20,
             c_pos21,c_pos22,c_pos23,c_pos24,c_pos25,c_pos26,c_pos27,c_pos28,c_pos29,c_pos30,
@@ -36,18 +39,23 @@ public class OCC extends javax.swing.JFrame {
             c_pos91,c_pos92,c_pos93,c_pos94,c_pos95,c_pos96,c_pos97,c_pos98,c_pos99
      };
         
-        InterfaceManager interfaceManager = new InterfaceManager(costumersLabels);
         initCommunications();
+        initOCC();
+
     }
     
+    private void initOCC(){
+        GUI_Manager gUI_Manager = new GUI_Manager(cServer, costumersLabels, manager_status, cashier_status);
+        gUI_Manager.start();
+    }
     
     private void initCommunications(){
-//        CServer cServer = new CServer(400);
-//        cServer.start();
-
         cClient = new CClient(401);
         cClient.connect();
-        System.out.println("Fim Com");
+        
+        cServer = new CServer(400);
+        cServer.connect();
+
     }
     
     
@@ -146,14 +154,14 @@ public class OCC extends javax.swing.JFrame {
         label7 = new java.awt.Label();
         settingsOpTime = new java.awt.TextField();
         settingsMode = new javax.swing.JComboBox<>();
-        jTextField3 = new javax.swing.JTextField();
+        manager_status = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         label9 = new java.awt.Label();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        cashier_status = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         c_pos51 = new java.awt.Label();
@@ -909,10 +917,10 @@ public class OCC extends javax.swing.JFrame {
             }
         });
 
-        jTextField3.setEditable(false);
-        jTextField3.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField3.setText("IDLE");
+        manager_status.setEditable(false);
+        manager_status.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        manager_status.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        manager_status.setText("IDLE");
 
         jLabel5.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
@@ -941,7 +949,7 @@ public class OCC extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(manager_status, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(label9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -981,7 +989,7 @@ public class OCC extends javax.swing.JFrame {
                         .addComponent(jButton2)
                         .addGap(34, 34, 34))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(manager_status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(52, 52, 52))))
         );
 
@@ -991,10 +999,10 @@ public class OCC extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Cashier");
 
-        jTextField2.setEditable(false);
-        jTextField2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField2.setText("IDLE");
+        cashier_status.setEditable(false);
+        cashier_status.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        cashier_status.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        cashier_status.setText("IDLE");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1007,7 +1015,7 @@ public class OCC extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(180, 180, 180)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cashier_status, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(205, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -1015,7 +1023,7 @@ public class OCC extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cashier_status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
@@ -1689,6 +1697,7 @@ public class OCC extends javax.swing.JFrame {
     private java.awt.Label c_pos97;
     private java.awt.Label c_pos98;
     private java.awt.Label c_pos99;
+    private javax.swing.JTextField cashier_status;
     private javax.swing.JToggleButton endButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -1711,8 +1720,6 @@ public class OCC extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private java.awt.Label label1;
     private java.awt.Label label10;
     private java.awt.Label label11;
@@ -1727,6 +1734,7 @@ public class OCC extends javax.swing.JFrame {
     private java.awt.Label label6;
     private java.awt.Label label7;
     private java.awt.Label label9;
+    private javax.swing.JTextField manager_status;
     private java.awt.TextField settingsCostumerTime;
     private javax.swing.JComboBox<String> settingsMode;
     private java.awt.TextField settingsNoCustumers;

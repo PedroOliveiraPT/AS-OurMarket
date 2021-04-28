@@ -1,6 +1,7 @@
 package ActiveEntity;
 
 
+import Communication.CClient;
 import GUI.GUI_Manager;
 import SACorridor.ICorridor_Customer;
 import SAEntranceHall.IEntranceHall_Customer;
@@ -47,10 +48,12 @@ public class AECustomer extends Thread {
 //    GUI MANAGER
     private GUI_Manager gUI_Manager;
     
+    private CClient cClient;
+    
     public AECustomer( int customerId, IIdle_Customer idle, IOutsideHall_Customer outsideHall, 
                         IEntranceHall_Customer entranceHall, ICorridorHall_Customer[] corridorHall,
                         ICorridor_Customer[] corridorShop, IPaymentHall_Customer paymentHall, IPaymentPoint_Customer paymentPoint,
-                        GUI_Manager gUI_Manager) {
+                        GUI_Manager gUI_Manager, CClient cClient) {
         this.customerId = customerId; 
         this.idle = idle;
         this.outsideHall = outsideHall;
@@ -60,12 +63,15 @@ public class AECustomer extends Thread {
         this.paymentHall = paymentHall;
         this.paymentPoint = paymentPoint;
         this.gUI_Manager = gUI_Manager;
+        this.cClient = cClient;
     }
     @Override
     public void run() {
         while ( true ) {
             // thread avança para Idle
+            cClient.send(this.customerId + "#idle");
             idle.idle(customerId );
+
             // se simulação activa (não suspend, não stop, não end), thread avança para o outsideHall
             System.out.println(this.customerId + " entering Outside Hall");
             try {
@@ -75,8 +81,9 @@ public class AECustomer extends Thread {
             }
             
             gUI_Manager.enterOutsideHall(); // so sabemos k entrou quando sai (old comment)
+            cClient.send(this.customerId + "#outsidehall");
             outsideHall.in( customerId );
-            
+
             try {
                 TimeUnit.SECONDS.sleep(0);
             } catch (InterruptedException ex) {
@@ -85,8 +92,9 @@ public class AECustomer extends Thread {
             System.out.println(this.customerId + " entering Entrance Hall");
             
             gUI_Manager.enterEntranceHall(customerId);  // so sabemos k entrou quando entra
+            cClient.send(this.customerId + "#entrancehall");
             entranceHall.in(customerId);
-            
+
             try {
                 TimeUnit.SECONDS.sleep(0);
             } catch (InterruptedException ex) {
@@ -103,12 +111,14 @@ public class AECustomer extends Thread {
             }
                 
             System.out.println(this.customerId + " entering corridor hall num " + curr_index);
+            cClient.send(this.customerId + "#corridorhall");
             gUI_Manager.enterCorridorHall(customerId, curr_index);      
 //            try {
 //                TimeUnit.SECONDS.sleep(5);
 //            } catch (InterruptedException ex) {
 //                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
 //            }
+
             if (corridorShop[curr_index].checkFull()){
                 System.out.println(this.customerId + "will wait");
                 corridorHall[curr_index].in(customerId);
@@ -118,21 +128,28 @@ public class AECustomer extends Thread {
             gUI_Manager.enterCorridorShop(customerId, curr_index);
 
             System.out.println(this.customerId + " shopping INICIO num " + curr_index);
+            cClient.send(this.customerId + "#corridor");
             corridorShop[curr_index].in(customerId, (SAPaymentHall) this.paymentHall);
+
             System.out.println(this.customerId + " shopping ");
             //corridorShop[curr_index].call();
             
             System.out.println(this.customerId + " paymenting hall");
             gUI_Manager.enterPaymentHall(customerId, curr_index);
+            cClient.send(this.customerId + "#payhall");
             this.paymentHall.in(customerId);
+
             try {
                 TimeUnit.SECONDS.sleep(0);
             } catch (InterruptedException ex) {
                 Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("Paying" + customerId);
+            cClient.send(this.customerId + "#paypoint");
             gUI_Manager.enterPaymentPoint(customerId, curr_index);
+
             this.paymentPoint.in(customerId);
+
             try {
                 TimeUnit.SECONDS.sleep(0);
             } catch (InterruptedException ex) {
@@ -141,6 +158,7 @@ public class AECustomer extends Thread {
             System.out.println("Finished shopping" + customerId);
 
             gUI_Manager.leaveStore(customerId);
+            cClient.send(this.customerId + "#idle");
             this.idle.idle(customerId);
             break;
         }

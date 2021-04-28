@@ -5,6 +5,7 @@
  */
 package ActiveEntity;
 
+import Communication.CClient;
 import GUI.GUI_Manager;
 import SAIdle.IIdle_Cashier;
 import SAPaymentHall.IPaymentHall_Cashier;
@@ -29,36 +30,48 @@ public class AECashier extends Thread{
     //    GUI MANAGER
     private GUI_Manager gUI_Manager;
     
+    private CClient cClient;
+    
     public AECashier(int maxCustomers, IIdle_Cashier idle, IPaymentHall_Cashier paymentHall, 
-            IPaymentPoint_Cashier entranceHall, GUI_Manager gUI_Manager){
+            IPaymentPoint_Cashier entranceHall, GUI_Manager gUI_Manager, CClient cClient){
         this.idle = idle;
         this.paymentHall = paymentHall;
         this.paymentPoint = entranceHall;
         this.maxCustomers = maxCustomers;
         this.gUI_Manager = gUI_Manager;
+        this.cClient = cClient;
     }
     
     @Override
     public void run() {
         //local vars
         int paidCustomers = 0;
+        boolean idled = false;
         while (true){
             try {
                 gUI_Manager.moveCashier(0);
+                if (!idled)
+                    cClient.send("cashier#idle");
                 this.idle.idleCashier();
+                idled = true;
                 if (this.paymentHall.getCount() > 0){
                     gUI_Manager.moveCashier(1);
+                    cClient.send("cashier#paymentbox");
                     this.paymentHall.call();
                     TimeUnit.MILLISECONDS.sleep(100);
                     
-                    
+                    cClient.send("cashier#idle");
                     gUI_Manager.moveCashier(0);
                     this.paymentPoint.call();
                     paidCustomers += 1;
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
                 
-                if (paidCustomers == maxCustomers) this.idle.idleCashier();
+                if (paidCustomers == maxCustomers) {
+                    cClient.send("cashier#idle");
+                    this.idle.idleCashier();
+                    idled = false;
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(AECashier.class.getName()).log(Level.SEVERE, null, ex);
             }

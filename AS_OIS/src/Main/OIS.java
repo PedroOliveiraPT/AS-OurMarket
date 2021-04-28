@@ -13,6 +13,7 @@ import ActiveEntity.AECashier;
 import ActiveEntity.AEControl;
 import ActiveEntity.AECustomer;
 import ActiveEntity.AEManager;
+import Communication.CClient;
 import GUI.GUI_Manager;
 import SACorridor.ICorridor_Customer;
 import SACorridor.SACorridor;
@@ -47,14 +48,15 @@ import SACorridorHall.ICorridorHall_Customer;
  */
 public class OIS extends javax.swing.JFrame {
     CServer cServer;
+    CClient cClient;
     
-    javax.swing.JTextPane[] entranceHallJTextPanes;
-    javax.swing.JTextPane[] corridorHallJTextPanes;
-    javax.swing.JTextPane[] corridorJTextPanes;
-    javax.swing.JTextPane[] payHallJTextPanes;
-    javax.swing.JTextPane[] payJTextPanes;
-    javax.swing.JLabel[] managerPanes;
-    javax.swing.JLabel[] cashierPanes;
+    private javax.swing.JTextPane[] entranceHallJTextPanes;
+    private javax.swing.JTextPane[] corridorHallJTextPanes;
+    private javax.swing.JTextPane[] corridorJTextPanes;
+    private javax.swing.JTextPane[] payHallJTextPanes;
+    private javax.swing.JTextPane[] payJTextPanes;
+    private javax.swing.JLabel[] managerPanes;
+    private javax.swing.JLabel[] cashierPanes;
     /**
      * Creates new form OIS
      */
@@ -112,12 +114,12 @@ public class OIS extends javax.swing.JFrame {
                                                     (IOutsideHall_Manager) outsideHall,
                                                     (IEntranceHall_Manager) entranceHall,
                                                     (ICorridorHall_Manager[]) corridorHalls,
-                                                    guim);
+                                                    guim, cClient);
         
         final AECashier aeCashier = new AECashier(MAX_CUSTOMERS, (IIdle_Cashier) idle,
                                                    (IPaymentHall_Cashier) paymentHall,
                                                     (IPaymentPoint_Cashier) paymentPoint,
-                                                    guim);
+                                                    guim, cClient);
         
         for ( int i = 0; i < MAX_CUSTOMERS; i++ ) {
             aeCustomer[ i ] = new AECustomer( i,
@@ -128,7 +130,7 @@ public class OIS extends javax.swing.JFrame {
                                               (ICorridor_Customer[]) corridors,
                                               (IPaymentHall_Customer) paymentHall,
                                               (IPaymentPoint_Customer) paymentPoint,
-                                              guim
+                                              guim, cClient
             );
             aeCustomer[ i ].start();
         }
@@ -152,8 +154,8 @@ public class OIS extends javax.swing.JFrame {
         cServer = new CServer(401);
         cServer.connect();
         
-//        CClient cClient = new CClient(400);
-//        cClient.start();
+        cClient = new CClient(400);
+        cClient.connect();
     }
     
     

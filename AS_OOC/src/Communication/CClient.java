@@ -17,13 +17,11 @@ import java.util.logging.Logger;
  * Criar cliente para enviar comandos para o OIS.
  * @author omp
  */
-public class CClient extends Thread {
+public class CClient{
     private int portNumber;
     
     private Socket socket;
     
-    private BufferedReader in;
-    private BufferedReader stdIn;
     private PrintWriter out;
     
     public CClient(int portNumber) {
@@ -49,7 +47,7 @@ public class CClient extends Thread {
                     new PrintWriter(socket.getOutputStream(), true);
                 
                 connected = true;
-                System.out.println("Connection Established!");
+                System.out.println("[OCC CLIENT]Connection Established!");
                 
             } catch (UnknownHostException e) {
                 System.err.println("Don't know about host " + hostName);
@@ -70,46 +68,6 @@ public class CClient extends Thread {
     
     public void send(String message){
         out.println(message);
-    }
-    
-    @Override
-    public void run(){
-        String hostName = "localhost";
-        
-        System.out.println("Initiating OCC Side Client...");
-        
-        boolean connected = false;
-        while(!connected){
-            try (
-                Socket echoSocket = new Socket(hostName, portNumber);
-                PrintWriter out =
-                    new PrintWriter(echoSocket.getOutputStream(), true);
-                BufferedReader in =
-                    new BufferedReader(
-                        new InputStreamReader(echoSocket.getInputStream()));
-                BufferedReader stdIn =
-                    new BufferedReader(
-                        new InputStreamReader(System.in))
-            ) {
-                String userInput;
-                while ((userInput = stdIn.readLine()) != null) {
-                    out.println(userInput);
-                    System.out.println("echo: " + in.readLine());
-                }
-            } catch (UnknownHostException e) {
-                System.err.println("Don't know about host " + hostName);
-            } catch (IOException e) {
-                System.err.println("Couldn't get I/O for the connection to " +
-                    hostName);
-            }
-            try {
-                Thread.sleep(1500);
-                System.out.println("Retrying...");
-            } catch (InterruptedException ex) {
-                Logger.getLogger(CClient.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
     }
     
 }

@@ -35,8 +35,10 @@ public class AEManager extends Thread {
     //    GUI MANAGER
     private GUI_Manager gUI_Manager;
     
+
     private CClient cClient;
-    
+    private StatusManager stManager;
+
     public AEManager(int maxCustomers, IIdle_Manager idle, IOutsideHall_Manager outsideHall, 
             IEntranceHall_Manager entranceHall, ICorridorHall_Manager[] corridorHalls,
             GUI_Manager gUI_Manager, CClient cClient){
@@ -46,51 +48,64 @@ public class AEManager extends Thread {
         this.corridorHalls = corridorHalls;
         this.maxCustomers = maxCustomers;
         this.gUI_Manager = gUI_Manager;
+
         this.cClient = cClient;
+        this.stManager = StatusManager.IDLE;
+
     }
     
     @Override
     public void run() {
-        int numCustomersEnter = 0;
+
+        StatusManager stManagerTemp;
         boolean idled = false;
         while (true){
             gUI_Manager.moveManager(0);
             if (!idled)
                 cClient.send("manager#idle");
-            this.idle.idle();
+            stManagerTemp = this.idle.idle();
             idled = true;
-            if (!this.entranceHall.checkFull() && this.outsideHall.count() > 0){
-                try {
-                    gUI_Manager.moveManager(1);
-                    cClient.send("manager#outsidehall");
-                    this.outsideHall.call();
-                    TimeUnit.MILLISECONDS.sleep(100);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(AEManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            this.stManager = (stManagerTemp == null)? stManager:stManagerTemp;
+            
+            if (stManager == StatusManager.IDLE){
+                stManager = StatusManager.OUTSIDE;
 
             }
-                
             
-            for (ICorridorHall_Manager man: corridorHalls){
-                if (!man.checkFull() && this.entranceHall.count() > 0){
+            else if (stManager == StatusManager.OUTSIDE){
+                if (!this.entranceHall.checkFull() && this.outsideHall.count() > 0){
                     try {
-                        gUI_Manager.moveManager(2);
-                        cClient.send("manager#entrancehall");
-                        this.entranceHall.call();
+                        gUI_Manager.moveManager(1);
+                        cClient.send("manager#outsidehall");
+                        this.outsideHall.call();
                         TimeUnit.MILLISECONDS.sleep(100);
-                        numCustomersEnter += 1;
                     } catch (InterruptedException ex) {
                         Logger.getLogger(AEManager.class.getName()).log(Level.SEVERE, null, ex);
                     }
+
                 }
+                this.stManager = StatusManager.ENTRANCE;
             }
-            
-            if (numCustomersEnter == this.maxCustomers) {
-                cClient.send("manager#idle");
-                this.idle.idle();
-                idled = false;
+                
+            else if (stManager == StatusManager.ENTRANCE){
+                for (ICorridorHall_Manager man: corridorHalls){
+                    if (!man.checkFull() && this.entranceHall.count() > 0){
+                        try {
+                            gUI_Manager.moveManager(2);
+                            cClient.send("manager#entrancehall");
+                            this.entranceHall.call();
+                            TimeUnit.MILLISECONDS.sleep(100);
+                            this.idle.managerIncrementCounter();
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(AEManager.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                this.stManager = StatusManager.OUTSIDE;
             }
+
+//            cClient.send("manager#idle");
+
         }
     }
 }

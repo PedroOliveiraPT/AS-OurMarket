@@ -38,8 +38,9 @@ public class AEControl extends Thread {
             String msg = cServer.get(); // thread blocks here
             System.out.println("Received: " + msg);
             if (msg.equalsIgnoreCase("start")){   // n verifico se manda 1 start durante 1 execução: supoe-se k isso n acontece
-                System.out.println("a");
-                start(75); // TEM K SER O MSM K TA NA MAIN K AINDA N TRATEI DISSO PK O CODE DO STOR N SE PERCEBE COMO QUER ISTO YET
+                start(75); 
+            } else if (msg.equalsIgnoreCase("anything")){
+                System.out.println("PEDRO DO");
             }
         }
     }

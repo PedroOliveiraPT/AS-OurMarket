@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SAIdle;
-
-import ActiveEntity.StatusManager;
+package ActiveEntity;
 
 /**
  *
- * @author omp
+ * @author pedro
  */
-public interface IIdle_Manager {
-    public StatusManager idle();
-
-    public void managerIncrementCounter();
-    
+public enum StatusCustomer {
+    IDLE, OUTSIDE, CORRIDOR, ENTRANCE, CORRIDORHALL, PAYMENTHALL, PAYMENTPOINT;
 }

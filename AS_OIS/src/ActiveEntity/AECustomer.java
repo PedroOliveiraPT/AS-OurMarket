@@ -45,6 +45,12 @@ public class AECustomer extends Thread {
     // área partilhada PaymentPoint
     private final IPaymentPoint_Customer paymentPoint;
     
+    // Customer status
+    private StatusCustomer stCustomer;
+    
+    // Customer corridor hall index;
+    private int corr_index;
+    
 //    GUI MANAGER
     private GUI_Manager gUI_Manager;
     
@@ -63,104 +69,108 @@ public class AECustomer extends Thread {
         this.paymentHall = paymentHall;
         this.paymentPoint = paymentPoint;
         this.gUI_Manager = gUI_Manager;
+
         this.cClient = cClient;
+
+        this.stCustomer = StatusCustomer.IDLE;
+        this.corr_index = -1;
+
     }
     @Override
     public void run() {
+        StatusCustomer temp;
         while ( true ) {
             // thread avança para Idle
             cClient.send(this.customerId + "#idle");
-            idle.idle(customerId );
-
+            temp = idle.idle(customerId );
+            this.stCustomer = (temp==null)? stCustomer:temp;
+            if (this.stCustomer == StatusCustomer.IDLE) {
+                
+                this.stCustomer = StatusCustomer.OUTSIDE;
+                
+            }
             // se simulação activa (não suspend, não stop, não end), thread avança para o outsideHall
-            System.out.println(this.customerId + " entering Outside Hall");
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+            
+            if (this.stCustomer == StatusCustomer.OUTSIDE) {
+                System.out.println(this.customerId + " entering Outside Hall");
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                gUI_Manager.enterOutsideHall();
+                cClient.send(this.customerId + "#outsidehall");
+                outsideHall.in( customerId );
+                this.stCustomer = StatusCustomer.ENTRANCE;
             }
             
-            gUI_Manager.enterOutsideHall(); // so sabemos k entrou quando sai (old comment)
-            cClient.send(this.customerId + "#outsidehall");
-            outsideHall.in( customerId );
+            if (this.stCustomer == StatusCustomer.ENTRANCE) {
+                try {
+                    TimeUnit.SECONDS.sleep(0);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                System.out.println(this.customerId + " entering Entrance Hall");
 
-            try {
-                TimeUnit.SECONDS.sleep(0);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println(this.customerId + " entering Entrance Hall");
-            
-            gUI_Manager.enterEntranceHall(customerId);  // so sabemos k entrou quando entra
-            cClient.send(this.customerId + "#entrancehall");
-            entranceHall.in(customerId);
-
-            try {
-                TimeUnit.SECONDS.sleep(0);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+                gUI_Manager.enterEntranceHall(customerId);
+                cClient.send(this.customerId + "#entrancehall");
+                entranceHall.in(customerId);
+                this.stCustomer = StatusCustomer.CORRIDORHALL;
             }
             
-            System.out.println(this.customerId + " left entrance hall");
-            int curr_index=0;
-            for (int curr=0; curr < corridorHall.length; curr++){
-                if (!corridorHall[curr].checkFull()){
-                    curr_index = curr;
-                    break;
+            if (this.corr_index < 0){
+                for (int curr=0; curr < corridorHall.length; curr++){
+                    if (!corridorHall[curr].checkFull()){
+                        corr_index = curr;
+                        break;
+                    }
                 }
             }
-                
-            System.out.println(this.customerId + " entering corridor hall num " + curr_index);
-            cClient.send(this.customerId + "#corridorhall");
-            gUI_Manager.enterCorridorHall(customerId, curr_index);      
-//            try {
-//                TimeUnit.SECONDS.sleep(5);
-//            } catch (InterruptedException ex) {
-//                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
-//            }
 
-            if (corridorShop[curr_index].checkFull()){
-                System.out.println(this.customerId + "will wait");
-                corridorHall[curr_index].in(customerId);
-            }
-                
             
-            gUI_Manager.enterCorridorShop(customerId, curr_index);
-
-            System.out.println(this.customerId + " shopping INICIO num " + curr_index);
-            cClient.send(this.customerId + "#corridor");
-            corridorShop[curr_index].in(customerId, (SAPaymentHall) this.paymentHall);
-
-            System.out.println(this.customerId + " shopping ");
-            //corridorShop[curr_index].call();
             
-            System.out.println(this.customerId + " paymenting hall");
-            gUI_Manager.enterPaymentHall(customerId, curr_index);
-            cClient.send(this.customerId + "#payhall");
-            this.paymentHall.in(customerId);
-
-            try {
-                TimeUnit.SECONDS.sleep(0);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+            if (this.stCustomer == StatusCustomer.CORRIDORHALL) {
+                System.out.println(this.customerId + " left entrance hall");
+                System.out.println(this.customerId + " entering corridor hall num " + this.corr_index);
+                gUI_Manager.enterCorridorHall(customerId, this.corr_index);      
+                cClient.send(this.customerId + "#corridorhall");
+                if (corridorShop[this.corr_index].checkFull()){
+                    System.out.println(this.customerId + "will wait");
+                    corridorHall[this.corr_index].in(customerId);
+                }
+                this.stCustomer = StatusCustomer.CORRIDOR;
             }
-            System.out.println("Paying" + customerId);
-            cClient.send(this.customerId + "#paypoint");
-            gUI_Manager.enterPaymentPoint(customerId, curr_index);
+            
+            if (this.stCustomer == StatusCustomer.CORRIDOR){
+                gUI_Manager.enterCorridorShop(customerId, this.corr_index);
 
-            this.paymentPoint.in(customerId);
-
-            try {
-                TimeUnit.SECONDS.sleep(0);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(this.customerId + " shopping INICIO num " + this.corr_index);
+                cClient.send(this.customerId + "#corridor");
+                corridorShop[this.corr_index].in(customerId, (SAPaymentHall) this.paymentHall);
+                this.stCustomer = StatusCustomer.PAYMENTHALL;
             }
-            System.out.println("Finished shopping" + customerId);
+            
+            if (this.stCustomer == StatusCustomer.PAYMENTHALL) {
+                System.out.println(this.customerId + " paymenting hall");
+                gUI_Manager.enterPaymentHall(customerId, this.corr_index);
+                cClient.send(this.customerId + "#payhall");
+                this.paymentHall.in(customerId);
 
-            gUI_Manager.leaveStore(customerId);
-            cClient.send(this.customerId + "#idle");
-            this.idle.idle(customerId);
-            break;
+                this.stCustomer = StatusCustomer.PAYMENTPOINT;
+            }
+            
+            if (this.stCustomer == StatusCustomer.PAYMENTPOINT) {
+                System.out.println("Paying" + customerId);
+                gUI_Manager.enterPaymentPoint(customerId, this.corr_index);
+                cClient.send(this.customerId + "#paypoint");
+                this.paymentPoint.in(customerId);
+                System.out.println("Finished shopping" + customerId);
+
+                gUI_Manager.leaveStore(customerId);
+                cClient.send(this.customerId + "#idle");
+                this.stCustomer = StatusCustomer.IDLE;
+            }
+
         }
     }
 }

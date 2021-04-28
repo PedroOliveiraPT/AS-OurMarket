@@ -5,12 +5,16 @@
  */
 package SAIdle;
 
+import ActiveEntity.StatusCashier;
+
 /**
  *
  * @author pedro
  */
 public interface IIdle_Cashier {
 
-    public void idleCashier();
+    public StatusCashier idleCashier();
+
+    public void cashierIncrement();
     
 }

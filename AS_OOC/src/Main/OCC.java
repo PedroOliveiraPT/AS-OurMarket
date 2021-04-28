@@ -227,8 +227,8 @@ public class OCC extends javax.swing.JFrame {
         });
 
         suspendResumeButton.setSelected(true);
-        suspendResumeButton.setText("Suspend / Resume");
         suspendResumeButton.setEnabled(false);
+        suspendResumeButton.setLabel("Suspend");
         suspendResumeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 suspendResumeButtonActionPerformed(evt);
@@ -263,14 +263,13 @@ public class OCC extends javax.swing.JFrame {
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(24, Short.MAX_VALUE))
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(endButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(startStopButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(warningsLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(suspendResumeButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(endButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(startStopButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(warningsLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(suspendResumeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(28, 28, 28))))
         );
         jPanel11Layout.setVerticalGroup(
@@ -910,7 +909,7 @@ public class OCC extends javax.swing.JFrame {
             }
         });
 
-        settingsMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Auto", "Manual" }));
+        settingsMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Auto" }));
         settingsMode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settingsModeActionPerformed(evt);
@@ -927,8 +926,10 @@ public class OCC extends javax.swing.JFrame {
         jLabel5.setText("Controls");
 
         jButton1.setText("Allow Entrance");
+        jButton1.setEnabled(false);
 
         jButton2.setText("Allow Corridor");
+        jButton2.setEnabled(false);
 
         label9.setBackground(new java.awt.Color(0, 0, 0));
         label9.setFont(new java.awt.Font("Dialog", 0, 100)); // NOI18N
@@ -1477,7 +1478,7 @@ public class OCC extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(34, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel4)
@@ -1518,7 +1519,7 @@ public class OCC extends javax.swing.JFrame {
         String costumers_no = settingsNoCustumers.getText();
         String costumers_time = settingsCostumerTime.getText();
         System.out.println("Start # " + costumers_no + " # " + costumers_time + " # " + manager_mode + " # " + manager_time);
-        cClient.send(evt.getActionCommand());
+        cClient.send(evt.getActionCommand()+"#"+costumers_no+"#"+costumers_time+"#"+manager_time);
         if ("Start".equals(evt.getActionCommand())){
             suspendResumeButton.setEnabled(true);
             endButton.setEnabled(true);
@@ -1531,11 +1532,20 @@ public class OCC extends javax.swing.JFrame {
     }//GEN-LAST:event_startStopButtonActionPerformed
 
     private void suspendResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suspendResumeButtonActionPerformed
-        // TODO add your handling code here:
+        cClient.send(evt.getActionCommand());
+        if ("Suspend".equals(evt.getActionCommand())){
+            suspendResumeButton.setEnabled(true);
+            endButton.setEnabled(true);
+            startStopButton.setText("Resume");
+        } else {
+            startStopButton.setText("Suspend");
+            suspendResumeButton.setEnabled(false);
+            endButton.setEnabled(false);
+        }
     }//GEN-LAST:event_suspendResumeButtonActionPerformed
 
     private void endButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endButtonActionPerformed
-        // TODO add your handling code here:
+        cClient.send(evt.getActionCommand());
     }//GEN-LAST:event_endButtonActionPerformed
 
     private void settingsOpTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsOpTimeActionPerformed

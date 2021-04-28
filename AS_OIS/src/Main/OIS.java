@@ -72,11 +72,9 @@ public class OIS extends javax.swing.JFrame {
         initOIS();
     }
     private void initOIS() {
-<<<<<<< HEAD
-        final int MAX_CUSTOMERS = 9;
-=======
-        final int MAX_CUSTOMERS = 90;
->>>>>>> ba5aa3e6cf4718ec934e739d75e0b1191000c635
+
+        final int MAX_CUSTOMERS = 75;
+
         final int N_CORRIDOR_HALL = 3;
         final int N_CORRIDOR = 3;
         final int SIZE_ENTRANCE_HALL = 6;
@@ -134,18 +132,13 @@ public class OIS extends javax.swing.JFrame {
         
         // ...
         
-        try {
-            aeManager.join();
-            for ( int i = 0; i < MAX_CUSTOMERS; i++ )
-                aeCustomer[ i ].join();
-            aeCashier.join();
-        } catch ( Exception ex ) {}    
+//        try {
+//            aeManager.join();
+//            for ( int i = 0; i < MAX_CUSTOMERS; i++ )
+//                aeCustomer[ i ].join();
+//            aeCashier.join();
+//        } catch ( Exception ex ) {}    
         
-        System.out.println("Finished simulation");
-        System.out.println("Manager: "+ enti_manager.getX() + "; " + enti_manager.getY());
-        enti_manager.setLocation(456, 18);
-//        System.out.println("Manager: "+ enti_manager.getX() + "; " + enti_manager.getY());
-        enti_manager.repaint();
     }
     
     private void initCommunications(){

@@ -26,6 +26,7 @@ public class GUI_Manager {
     JTextPane[] payHallJTextPanes;
     JTextPane[] payJTextPanes;
     JLabel[] managerPanes;
+    JLabel[] cashierPanes;
     
     private Queue<Integer>[] corridorQueue;
     private Queue<Integer>[] paymentHallQueue;
@@ -33,7 +34,7 @@ public class GUI_Manager {
     public GUI_Manager(JTextField OH_all, JTextPane[] entranceHallJTextPanes, 
             JTextPane[] corridorHallJTextPanes, JTextPane[] corridorJTextPanes, 
             JTextPane[] payHallJTextPanes, JTextPane[] payJTextPanes,
-            javax.swing.JLabel[] managerPanes) {
+            javax.swing.JLabel[] managerPanes, JLabel[] cashierPanes) {
         this.outsideHall = OH_all;
         this.entranceHallJTextPanes = entranceHallJTextPanes;
         this.corridorHallJTextPanes = corridorHallJTextPanes;
@@ -41,6 +42,7 @@ public class GUI_Manager {
         this.payHallJTextPanes = payHallJTextPanes;
         this.payJTextPanes = payJTextPanes;
         this.managerPanes = managerPanes;
+        this.cashierPanes = cashierPanes;
         
         this.corridorQueue = new LinkedList[3];
         this.paymentHallQueue = new LinkedList[3];
@@ -238,6 +240,17 @@ public class GUI_Manager {
                 managerPanes[i].setText("manager");
             } else {
                 managerPanes[i].setText("empty");
+            }
+        }
+    }
+    
+//    Cashier
+        public void moveCashier(int pos){
+        for (int i=0; i < cashierPanes.length; i++){
+            if (i==pos){
+                cashierPanes[i].setText("cashier");
+            } else {
+                cashierPanes[i].setText("empty");
             }
         }
     }

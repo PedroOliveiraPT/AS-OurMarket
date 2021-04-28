@@ -53,6 +53,7 @@ public class OIS extends javax.swing.JFrame {
     javax.swing.JTextPane[] corridorJTextPanes;
     javax.swing.JTextPane[] payHallJTextPanes;
     javax.swing.JTextPane[] payJTextPanes;
+    javax.swing.JLabel[] managerPanes;
     /**
      * Creates new form OIS
      */
@@ -64,6 +65,7 @@ public class OIS extends javax.swing.JFrame {
         this.corridorJTextPanes = new javax.swing.JTextPane[]{C_01_pos01,C_01_pos02,C_02_pos01,C_02_pos02,C_03_pos01,C_03_pos02};
         this.payHallJTextPanes = new javax.swing.JTextPane[]{PH_pos01, PH_pos02};
         this.payJTextPanes = new javax.swing.JTextPane[]{P_pos01};
+        this.managerPanes = new javax.swing.JLabel[]{mana_pos1,mana_pos2,mana_pos3};
 
 
         initCommunications();
@@ -96,7 +98,7 @@ public class OIS extends javax.swing.JFrame {
 
         
         GUI_Manager guim = new GUI_Manager(OH_all, entranceHallJTextPanes, corridorHallJTextPanes, corridorJTextPanes, 
-                payHallJTextPanes, payJTextPanes);
+                payHallJTextPanes, payJTextPanes, managerPanes);
         
         for (int i = 0; i < N_CORRIDOR_HALL; i++) {
             corridorHalls[i] = new SACorridorHall(SIZE_CORRIDOR_HALL);
@@ -108,7 +110,8 @@ public class OIS extends javax.swing.JFrame {
         final AEManager aeManager = new AEManager( MAX_CUSTOMERS, (IIdle_Manager) idle,
                                                     (IOutsideHall_Manager) outsideHall,
                                                     (IEntranceHall_Manager) entranceHall,
-                                                    (ICorridorHall_Manager[]) corridorHalls);
+                                                    (ICorridorHall_Manager[]) corridorHalls,
+                                                    guim);
         
         final AECashier aeCashier = new AECashier(MAX_CUSTOMERS, (IIdle_Cashier) idle,
                                                    (IPaymentHall_Cashier) paymentHall,
@@ -245,6 +248,9 @@ public class OIS extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         enti_manager = new javax.swing.JLabel();
+        mana_pos1 = new javax.swing.JLabel();
+        mana_pos3 = new javax.swing.JLabel();
+        mana_pos2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -644,7 +650,15 @@ public class OIS extends javax.swing.JFrame {
         jLabel12.setText("Costumer");
 
         enti_manager.setIcon(new javax.swing.ImageIcon("C:\\Users\\Luís\\Downloads\\manager.png")); // NOI18N
-        enti_manager.setText("Manager");
+
+        mana_pos1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        mana_pos1.setText("Manager");
+
+        mana_pos3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        mana_pos3.setText("empty");
+
+        mana_pos2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        mana_pos2.setText("empty");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -659,9 +673,11 @@ public class OIS extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(panel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(3, 3, 3)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(mana_pos2)
+                                    .addComponent(jLabel3))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -675,9 +691,13 @@ public class OIS extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel5)
-                                            .addComponent(jLabel1)))))
-                            .addComponent(enti_manager))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jLabel1)))
+                                    .addComponent(mana_pos3)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(mana_pos1)
+                                    .addComponent(enti_manager))
+                                .addGap(52, 52, 52)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -719,15 +739,21 @@ public class OIS extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(48, 48, 48)
                         .addComponent(jLabel12)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
-                        .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(88, 88, 88)
+                                .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(enti_manager)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(mana_pos1)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -739,7 +765,9 @@ public class OIS extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
                                 .addComponent(jLabel1)
-                                .addGap(62, 62, 62)
+                                .addGap(50, 50, 50)
+                                .addComponent(mana_pos3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel2))
@@ -787,22 +815,22 @@ public class OIS extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(enti_manager)
-                        .addGap(47, 47, 47)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(123, 123, 123)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(45, 45, 45)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(panel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(45, 45, 45)
-                                    .addComponent(jLabel3))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(87, 87, 87)
+                                .addComponent(mana_pos2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel3)))))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel12)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -937,6 +965,9 @@ public class OIS extends javax.swing.JFrame {
     private javax.swing.JTextPane jTextPane26;
     private javax.swing.JTextPane jTextPane27;
     private javax.swing.JTextPane jTextPane32;
+    private javax.swing.JLabel mana_pos1;
+    private javax.swing.JLabel mana_pos2;
+    private javax.swing.JLabel mana_pos3;
     private java.awt.Panel panel3;
     // End of variables declaration//GEN-END:variables
 }

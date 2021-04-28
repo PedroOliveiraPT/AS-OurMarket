@@ -8,6 +8,7 @@ package GUI;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantLock;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
@@ -24,17 +25,22 @@ public class GUI_Manager {
     JTextPane[] corridorJTextPanes;
     JTextPane[] payHallJTextPanes;
     JTextPane[] payJTextPanes;
+    JLabel[] managerPanes;
     
     private Queue<Integer>[] corridorQueue;
     private Queue<Integer>[] paymentHallQueue;
 
-    public GUI_Manager(JTextField OH_all, JTextPane[] entranceHallJTextPanes, JTextPane[] corridorHallJTextPanes, JTextPane[] corridorJTextPanes, JTextPane[] payHallJTextPanes, JTextPane[] payJTextPanes) {
+    public GUI_Manager(JTextField OH_all, JTextPane[] entranceHallJTextPanes, 
+            JTextPane[] corridorHallJTextPanes, JTextPane[] corridorJTextPanes, 
+            JTextPane[] payHallJTextPanes, JTextPane[] payJTextPanes,
+            javax.swing.JLabel[] managerPanes) {
         this.outsideHall = OH_all;
         this.entranceHallJTextPanes = entranceHallJTextPanes;
         this.corridorHallJTextPanes = corridorHallJTextPanes;
         this.corridorJTextPanes = corridorJTextPanes;
         this.payHallJTextPanes = payHallJTextPanes;
         this.payJTextPanes = payJTextPanes;
+        this.managerPanes = managerPanes;
         
         this.corridorQueue = new LinkedList[3];
         this.paymentHallQueue = new LinkedList[3];
@@ -223,5 +229,16 @@ public class GUI_Manager {
             rl.unlock();
         }
        
+    }
+    
+//    Manager
+    public void moveManager(int pos){
+        for (int i=0; i < managerPanes.length; i++){
+            if (i==pos){
+                managerPanes[i].setText("manager");
+            } else {
+                managerPanes[i].setText("empty");
+            }
+        }
     }
 }

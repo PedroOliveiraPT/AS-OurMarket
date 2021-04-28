@@ -2,6 +2,7 @@
 
 package ActiveEntity;
 
+import Communication.CServer;
 import SAIdle.IIdle_Control;
 import java.net.Socket;
 
@@ -14,11 +15,13 @@ import java.net.Socket;
 public class AEControl extends Thread {
 
     private final IIdle_Control idle;
+    private CServer cServer;
     
-    public AEControl( IIdle_Control idle /* mais áreas partilhadas */ ) {
+    public AEControl( IIdle_Control idle, CServer cServer /* mais áreas partilhadas */ ) {
         this.idle = idle;
+        this.cServer = cServer;
     }
-    public void start( int nCustomers, Socket socket ) {
+    public void start( int nCustomers /*, Socket socket */) {
         idle.start( nCustomers );
     }
     public void end() {
@@ -31,6 +34,13 @@ public class AEControl extends Thread {
     
     @Override
     public void run() {
-        // ver qual a msg recebida, executar comando e responder
+        while(true){
+            String msg = cServer.get(); // thread blocks here
+            System.out.println("Received: " + msg);
+            if (msg.equalsIgnoreCase("start")){   // n verifico se manda 1 start durante 1 execução: supoe-se k isso n acontece
+                System.out.println("a");
+                start(75); // TEM K SER O MSM K TA NA MAIN K AINDA N TRATEI DISSO PK O CODE DO STOR N SE PERCEBE COMO QUER ISTO YET
+            }
+        }
     }
 }

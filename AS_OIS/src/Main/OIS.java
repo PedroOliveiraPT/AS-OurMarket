@@ -6,28 +6,25 @@
 package Main;
 
 
-import ActiveEntity.AEControl;
-import ActiveEntity.AECustomer;
-import ActiveEntity.AEManager;
-import Communication.CClient;
+
 import Communication.CServer;
 
 import ActiveEntity.AECashier;
+import ActiveEntity.AEControl;
 import ActiveEntity.AECustomer;
 import ActiveEntity.AEManager;
 import GUI.GUI_Manager;
 import SACorridor.ICorridor_Customer;
 import SACorridor.SACorridor;
-import SACorridorHall.ICorridorHall_Customer;
-import SACorridorHall.ICorridorHall_Manager;
 
+import SACorridorHall.ICorridorHall_Manager;
 import SACorridorHall.SACorridorHall;
+
 import SAEntranceHall.IEntranceHall_Customer;
 import SAEntranceHall.IEntranceHall_Manager;
 import SAEntranceHall.SAEntranceHall;
 
 import SAIdle.IIdle_Cashier;
-
 import SAIdle.IIdle_Customer;
 import SAIdle.IIdle_Manager;
 import SAIdle.SAIdle;
@@ -35,6 +32,7 @@ import SAIdle.SAIdle;
 import SAOutsideHall.IOutsideHall_Customer;
 import SAOutsideHall.IOutsideHall_Manager;
 import SAOutsideHall.SAOutsideHall;
+
 import SAPaymentHall.IPaymentHall_Cashier;
 import SAPaymentHall.IPaymentHall_Customer;
 import SAPaymentHall.SAPaymentHall;
@@ -68,13 +66,14 @@ public class OIS extends javax.swing.JFrame {
         this.payJTextPanes = new javax.swing.JTextPane[]{P_pos01};
 
 
-//        initCommunications();
+        initCommunications();
         initOIS();
     }
     private void initOIS() {
+        
+        System.out.println("Preparing OIS");
 
         final int MAX_CUSTOMERS = 75;
-
         final int N_CORRIDOR_HALL = 3;
         final int N_CORRIDOR = 3;
         final int SIZE_ENTRANCE_HALL = 6;
@@ -82,16 +81,19 @@ public class OIS extends javax.swing.JFrame {
         final int SIZE_CORRIDOR = 2;
         final int SIZE_PAYMENT_HALL = 2;
         final int SIZE_PAYMENT_POINT = 1;
-        // ....
         
-        System.out.println("Preparing OIS");
-        final SAIdle idle = new SAIdle();
+
+        final SAIdle idle = new SAIdle( MAX_CUSTOMERS );
         final SAOutsideHall outsideHall =  new SAOutsideHall( MAX_CUSTOMERS );
         final SAEntranceHall entranceHall =  new SAEntranceHall( SIZE_ENTRANCE_HALL );
         final SACorridorHall[] corridorHalls = new SACorridorHall[N_CORRIDOR_HALL];
         final SACorridor[] corridors = new SACorridor[N_CORRIDOR_HALL];
         final SAPaymentHall paymentHall = new SAPaymentHall(SIZE_PAYMENT_HALL, corridors);
         final SAPaymentPoint paymentPoint = new SAPaymentPoint(SIZE_PAYMENT_POINT);
+        
+        AEControl aEControl = new AEControl(idle, cServer);
+        aEControl.start();
+
         
         GUI_Manager guim = new GUI_Manager(OH_all, entranceHallJTextPanes, corridorHallJTextPanes, corridorJTextPanes, 
                 payHallJTextPanes, payJTextPanes);
@@ -103,12 +105,12 @@ public class OIS extends javax.swing.JFrame {
         // outras SA ...
         
         final AECustomer[] aeCustomer = new AECustomer[ MAX_CUSTOMERS ];
-        final AEManager aeManager = new AEManager((IIdle_Manager) idle,
+        final AEManager aeManager = new AEManager( MAX_CUSTOMERS, (IIdle_Manager) idle,
                                                     (IOutsideHall_Manager) outsideHall,
                                                     (IEntranceHall_Manager) entranceHall,
                                                     (ICorridorHall_Manager[]) corridorHalls);
         
-        final AECashier aeCashier = new AECashier((IIdle_Cashier) idle,
+        final AECashier aeCashier = new AECashier(MAX_CUSTOMERS, (IIdle_Cashier) idle,
                                                    (IPaymentHall_Cashier) paymentHall,
                                                     (IPaymentPoint_Cashier) paymentPoint);
         
@@ -127,7 +129,7 @@ public class OIS extends javax.swing.JFrame {
         }
         aeCashier.start();
         aeManager.start();
-        
+        System.out.println("Awaiting...");
         
         
         // ...

@@ -65,7 +65,7 @@ public class AECustomer extends Thread {
     public void run() {
         while ( true ) {
             // thread avança para Idle
-            // idle.idle(customerId );
+            idle.idle(customerId );
             // se simulação activa (não suspend, não stop, não end), thread avança para o outsideHall
             System.out.println(this.customerId + " entering Outside Hall");
             try {
@@ -139,8 +139,10 @@ public class AECustomer extends Thread {
                 Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("Finished shopping" + customerId);
+
             gUI_Manager.leaveStore(customerId);
-                break;
+            this.idle.idle(customerId);
+            break;
         }
     }
 }

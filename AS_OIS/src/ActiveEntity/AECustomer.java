@@ -69,7 +69,7 @@ public class AECustomer extends Thread {
             // se simulação activa (não suspend, não stop, não end), thread avança para o outsideHall
             System.out.println(this.customerId + " entering Outside Hall");
             try {
-                TimeUnit.SECONDS.sleep(11);
+                TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException ex) {
                 Logger.getLogger(AECustomer.class.getName()).log(Level.SEVERE, null, ex);
             }

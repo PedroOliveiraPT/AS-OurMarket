@@ -1534,18 +1534,17 @@ public class OCC extends javax.swing.JFrame {
     private void suspendResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suspendResumeButtonActionPerformed
         cClient.send(evt.getActionCommand());
         if ("Suspend".equals(evt.getActionCommand())){
-            suspendResumeButton.setEnabled(true);
-            endButton.setEnabled(true);
-            startStopButton.setText("Resume");
+            suspendResumeButton.setText("Resume");
         } else {
-            startStopButton.setText("Suspend");
-            suspendResumeButton.setEnabled(false);
-            endButton.setEnabled(false);
+            suspendResumeButton.setText("Suspend");
         }
     }//GEN-LAST:event_suspendResumeButtonActionPerformed
 
     private void endButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endButtonActionPerformed
         cClient.send(evt.getActionCommand());
+        endButton.setEnabled(false);
+        suspendResumeButton.setEnabled(false);
+        startStopButton.setText("Start");
     }//GEN-LAST:event_endButtonActionPerformed
 
     private void settingsOpTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsOpTimeActionPerformed
